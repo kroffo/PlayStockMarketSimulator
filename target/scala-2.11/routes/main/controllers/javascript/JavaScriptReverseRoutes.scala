@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/kennethroffo/Documents/PlayStockMarketSimulator/conf/routes
-// @DATE:Wed Mar 22 22:57:02 EDT 2017
+// @DATE:Thu Mar 23 15:46:02 EDT 2017
 
 import play.api.routing.JavaScriptReverseRoute
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
@@ -95,7 +95,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:17
+  // @LINE:19
   class ReverseCompanyQuery(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -103,12 +103,32 @@ package controllers.javascript {
     }
 
   
-    // @LINE:17
+    // @LINE:19
     def getCompany: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.CompanyQuery.getCompany",
       """
         function(symbol0) {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "companies/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("symbol", encodeURIComponent(symbol0))})
+        }
+      """
+    )
+  
+    // @LINE:23
+    def deleteCompany: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.CompanyQuery.deleteCompany",
+      """
+        function(symbol0) {
+          return _wA({method:"DELETE", url:"""" + _prefix + { _defaultPrefix } + """" + "companies/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("symbol", encodeURIComponent(symbol0))})
+        }
+      """
+    )
+  
+    // @LINE:21
+    def updateCompany: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.CompanyQuery.updateCompany",
+      """
+        function(symbol0) {
+          return _wA({method:"PUT", url:"""" + _prefix + { _defaultPrefix } + """" + "companies/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("symbol", encodeURIComponent(symbol0))})
         }
       """
     )
@@ -122,6 +142,16 @@ package controllers.javascript {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:17
+    def postCompany: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Companies.postCompany",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "companies"})
+        }
+      """
+    )
   
     // @LINE:15
     def getCompanies: JavaScriptReverseRoute = JavaScriptReverseRoute(

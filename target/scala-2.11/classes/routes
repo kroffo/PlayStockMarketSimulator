@@ -14,4 +14,10 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET     /companies		    controllers.Companies.getCompanies
 
+POST	/companies		    controllers.Companies.postCompany
+
 GET     /companies/:symbol	    controllers.CompanyQuery.getCompany(symbol: String)
+
+PUT 	/companies/:symbol	    controllers.CompanyQuery.updateCompany(symbol: String)
+
+DELETE	/companies/:symbol	    controllers.CompanyQuery.deleteCompany(symbol: String)

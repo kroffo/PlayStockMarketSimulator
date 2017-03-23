@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/kennethroffo/Documents/PlayStockMarketSimulator/conf/routes
-// @DATE:Wed Mar 22 22:57:02 EDT 2017
+// @DATE:Thu Mar 23 15:46:02 EDT 2017
 
 package router
 
@@ -26,7 +26,7 @@ class Routes(
   Assets_5: controllers.Assets,
   // @LINE:15
   Companies_4: controllers.Companies,
-  // @LINE:17
+  // @LINE:19
   CompanyQuery_0: controllers.CompanyQuery,
   val prefix: String
 ) extends GeneratedRouter {
@@ -43,7 +43,7 @@ class Routes(
     Assets_5: controllers.Assets,
     // @LINE:15
     Companies_4: controllers.Companies,
-    // @LINE:17
+    // @LINE:19
     CompanyQuery_0: controllers.CompanyQuery
   ) = this(errorHandler, HomeController_2, CountController_1, AsyncController_3, Assets_5, Companies_4, CompanyQuery_0, "/")
 
@@ -64,7 +64,10 @@ class Routes(
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """message""", """controllers.AsyncController.message"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies""", """controllers.Companies.getCompanies"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies""", """controllers.Companies.postCompany"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies/""" + "$" + """symbol<[^/]+>""", """controllers.CompanyQuery.getCompany(symbol:String)"""),
+    ("""PUT""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies/""" + "$" + """symbol<[^/]+>""", """controllers.CompanyQuery.updateCompany(symbol:String)"""),
+    ("""DELETE""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies/""" + "$" + """symbol<[^/]+>""", """controllers.CompanyQuery.deleteCompany(symbol:String)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
     case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
@@ -158,10 +161,27 @@ class Routes(
   )
 
   // @LINE:17
-  private[this] lazy val controllers_CompanyQuery_getCompany5_route = Route("GET",
+  private[this] lazy val controllers_Companies_postCompany5_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("companies")))
+  )
+  private[this] lazy val controllers_Companies_postCompany5_invoker = createInvoker(
+    Companies_4.postCompany,
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Companies",
+      "postCompany",
+      Nil,
+      "POST",
+      """""",
+      this.prefix + """companies"""
+    )
+  )
+
+  // @LINE:19
+  private[this] lazy val controllers_CompanyQuery_getCompany6_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("companies/"), DynamicPart("symbol", """[^/]+""",true)))
   )
-  private[this] lazy val controllers_CompanyQuery_getCompany5_invoker = createInvoker(
+  private[this] lazy val controllers_CompanyQuery_getCompany6_invoker = createInvoker(
     CompanyQuery_0.getCompany(fakeValue[String]),
     HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -169,6 +189,40 @@ class Routes(
       "getCompany",
       Seq(classOf[String]),
       "GET",
+      """""",
+      this.prefix + """companies/""" + "$" + """symbol<[^/]+>"""
+    )
+  )
+
+  // @LINE:21
+  private[this] lazy val controllers_CompanyQuery_updateCompany7_route = Route("PUT",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("companies/"), DynamicPart("symbol", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_CompanyQuery_updateCompany7_invoker = createInvoker(
+    CompanyQuery_0.updateCompany(fakeValue[String]),
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.CompanyQuery",
+      "updateCompany",
+      Seq(classOf[String]),
+      "PUT",
+      """""",
+      this.prefix + """companies/""" + "$" + """symbol<[^/]+>"""
+    )
+  )
+
+  // @LINE:23
+  private[this] lazy val controllers_CompanyQuery_deleteCompany8_route = Route("DELETE",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("companies/"), DynamicPart("symbol", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_CompanyQuery_deleteCompany8_invoker = createInvoker(
+    CompanyQuery_0.deleteCompany(fakeValue[String]),
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.CompanyQuery",
+      "deleteCompany",
+      Seq(classOf[String]),
+      "DELETE",
       """""",
       this.prefix + """companies/""" + "$" + """symbol<[^/]+>"""
     )
@@ -208,9 +262,27 @@ class Routes(
       }
   
     // @LINE:17
-    case controllers_CompanyQuery_getCompany5_route(params) =>
+    case controllers_Companies_postCompany5_route(params) =>
+      call { 
+        controllers_Companies_postCompany5_invoker.call(Companies_4.postCompany)
+      }
+  
+    // @LINE:19
+    case controllers_CompanyQuery_getCompany6_route(params) =>
       call(params.fromPath[String]("symbol", None)) { (symbol) =>
-        controllers_CompanyQuery_getCompany5_invoker.call(CompanyQuery_0.getCompany(symbol))
+        controllers_CompanyQuery_getCompany6_invoker.call(CompanyQuery_0.getCompany(symbol))
+      }
+  
+    // @LINE:21
+    case controllers_CompanyQuery_updateCompany7_route(params) =>
+      call(params.fromPath[String]("symbol", None)) { (symbol) =>
+        controllers_CompanyQuery_updateCompany7_invoker.call(CompanyQuery_0.updateCompany(symbol))
+      }
+  
+    // @LINE:23
+    case controllers_CompanyQuery_deleteCompany8_route(params) =>
+      call(params.fromPath[String]("symbol", None)) { (symbol) =>
+        controllers_CompanyQuery_deleteCompany8_invoker.call(CompanyQuery_0.deleteCompany(symbol))
       }
   }
 }

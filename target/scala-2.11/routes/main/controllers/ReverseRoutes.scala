@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/kennethroffo/Documents/PlayStockMarketSimulator/conf/routes
-// @DATE:Wed Mar 22 22:57:02 EDT 2017
+// @DATE:Thu Mar 23 15:46:02 EDT 2017
 
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
 import play.core.routing.{ HandlerDef, ReverseRouteContext, queryString, dynamicString }
@@ -73,17 +73,29 @@ package controllers {
   
   }
 
-  // @LINE:17
+  // @LINE:19
   class ReverseCompanyQuery(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:17
+    // @LINE:19
     def getCompany(symbol:String): Call = {
       import ReverseRouteContext.empty
       Call("GET", _prefix + { _defaultPrefix } + "companies/" + implicitly[PathBindable[String]].unbind("symbol", dynamicString(symbol)))
+    }
+  
+    // @LINE:23
+    def deleteCompany(symbol:String): Call = {
+      import ReverseRouteContext.empty
+      Call("DELETE", _prefix + { _defaultPrefix } + "companies/" + implicitly[PathBindable[String]].unbind("symbol", dynamicString(symbol)))
+    }
+  
+    // @LINE:21
+    def updateCompany(symbol:String): Call = {
+      import ReverseRouteContext.empty
+      Call("PUT", _prefix + { _defaultPrefix } + "companies/" + implicitly[PathBindable[String]].unbind("symbol", dynamicString(symbol)))
     }
   
   }
@@ -94,6 +106,12 @@ package controllers {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:17
+    def postCompany(): Call = {
+      import ReverseRouteContext.empty
+      Call("POST", _prefix + { _defaultPrefix } + "companies")
+    }
   
     // @LINE:15
     def getCompanies(): Call = {
