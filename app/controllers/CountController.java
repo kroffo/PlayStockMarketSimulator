@@ -29,7 +29,7 @@ public class CountController extends Controller {
      * requests by an entry in the <code>routes</code> config file.
      */
     public Result count() {
-        return ok("You have accessed this page " + Integer.toString(counter.nextCount() + 1) + " times.");
+        return ok(session("user") + ", you have accessed this page " + Integer.toString(counter.nextCount() + 1) + " times.");
     }
 
 }
