@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
-// @SOURCE:/Users/kennethroffo/Documents/PlayStockMarketSimulator/conf/routes
-// @DATE:Wed Mar 22 22:57:02 EDT 2017
+// @SOURCE:/Users/stephendicerce/csc435/PlayStockMarketSimulator/conf/routes
+// @DATE:Thu Mar 23 16:11:27 EDT 2017
 
 import play.api.routing.JavaScriptReverseRoute
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
@@ -35,6 +35,26 @@ package controllers.javascript {
   
   }
 
+  // @LINE:20
+  class ReverseUsers(_prefix: => String) {
+
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:20
+    def getUsers: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.Users.getUsers",
+      """
+        function(sortingMethod0,companyName1) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "users" + _qS([(sortingMethod0 == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("sortingMethod", sortingMethod0)), (companyName1 == null ? null : (""" + implicitly[QueryStringBindable[String]].javascriptUnbind + """)("companyName", companyName1))])})
+        }
+      """
+    )
+  
+  }
+
   // @LINE:8
   class ReverseCountController(_prefix: => String) {
 
@@ -49,6 +69,26 @@ package controllers.javascript {
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "count"})
+        }
+      """
+    )
+  
+  }
+
+  // @LINE:22
+  class ReverseUserQuery(_prefix: => String) {
+
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:22
+    def getUser: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.UserQuery.getUser",
+      """
+        function(name0) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "users/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("name", encodeURIComponent(name0))})
         }
       """
     )

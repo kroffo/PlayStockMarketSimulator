@@ -15,3 +15,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /companies		    controllers.Companies.getCompanies
 
 GET     /companies/:symbol	    controllers.CompanyQuery.getCompany(symbol: String)
+
+
+GET     /users                      controllers.Users.getUsers(sortingMethod: String ?=null, companyName: String ?=null)
+
+GET     /users/:name                controllers.UserQuery.getUser(name: String)

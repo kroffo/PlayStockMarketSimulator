@@ -4,7 +4,7 @@
 		module="playstockmarketsimulator-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20170322191148"
+		publication="20170323114530"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

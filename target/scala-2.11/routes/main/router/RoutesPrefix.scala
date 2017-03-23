@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
-// @SOURCE:/Users/kennethroffo/Documents/PlayStockMarketSimulator/conf/routes
-// @DATE:Wed Mar 22 22:57:02 EDT 2017
+// @SOURCE:/Users/stephendicerce/csc435/PlayStockMarketSimulator/conf/routes
+// @DATE:Thu Mar 23 16:11:27 EDT 2017
 
 
 package router {
