@@ -4,7 +4,11 @@
 		module="play-java_2.11"
 		revision="1.0-SNAPSHOT"
 		status="integration"
+<<<<<<< HEAD
 		publication="20170323140909"
+=======
+		publication="20170323114539"
+>>>>>>> 1676e4ceee33bb4933ccb8b9fd7ad0e752b1cd18
 	>
 		<description>
 		play-java

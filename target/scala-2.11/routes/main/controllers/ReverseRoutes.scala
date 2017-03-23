@@ -1,7 +1,12 @@
 
 // @GENERATOR:play-routes-compiler
+<<<<<<< HEAD
 // @SOURCE:/Users/kennethroffo/Documents/PlayStockMarketSimulator/conf/routes
 // @DATE:Thu Mar 23 15:46:02 EDT 2017
+=======
+// @SOURCE:/Users/stephendicerce/csc435/PlayStockMarketSimulator/conf/routes
+// @DATE:Thu Mar 23 16:11:27 EDT 2017
+>>>>>>> 1676e4ceee33bb4933ccb8b9fd7ad0e752b1cd18
 
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
 import play.core.routing.{ HandlerDef, ReverseRouteContext, queryString, dynamicString }
@@ -28,6 +33,21 @@ package controllers {
   
   }
 
+  // @LINE:20
+  class ReverseUsers(_prefix: => String) {
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:20
+    def getUsers(sortingMethod:String = null, companyName:String = null): Call = {
+      import ReverseRouteContext.empty
+      Call("GET", _prefix + { _defaultPrefix } + "users" + queryString(List(if(sortingMethod == null) None else Some(implicitly[QueryStringBindable[String]].unbind("sortingMethod", sortingMethod)), if(companyName == null) None else Some(implicitly[QueryStringBindable[String]].unbind("companyName", companyName)))))
+    }
+  
+  }
+
   // @LINE:8
   class ReverseCountController(_prefix: => String) {
     def _defaultPrefix: String = {
@@ -39,6 +59,21 @@ package controllers {
     def count(): Call = {
       import ReverseRouteContext.empty
       Call("GET", _prefix + { _defaultPrefix } + "count")
+    }
+  
+  }
+
+  // @LINE:22
+  class ReverseUserQuery(_prefix: => String) {
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:22
+    def getUser(name:String): Call = {
+      import ReverseRouteContext.empty
+      Call("GET", _prefix + { _defaultPrefix } + "users/" + implicitly[PathBindable[String]].unbind("name", dynamicString(name)))
     }
   
   }

@@ -1,7 +1,12 @@
 
 // @GENERATOR:play-routes-compiler
+<<<<<<< HEAD
 // @SOURCE:/Users/kennethroffo/Documents/PlayStockMarketSimulator/conf/routes
 // @DATE:Thu Mar 23 15:46:02 EDT 2017
+=======
+// @SOURCE:/Users/stephendicerce/csc435/PlayStockMarketSimulator/conf/routes
+// @DATE:Thu Mar 23 16:11:27 EDT 2017
+>>>>>>> 1676e4ceee33bb4933ccb8b9fd7ad0e752b1cd18
 
 package router
 
@@ -17,41 +22,61 @@ import _root_.play.libs.F
 class Routes(
   override val errorHandler: play.api.http.HttpErrorHandler, 
   // @LINE:6
-  HomeController_2: controllers.HomeController,
+  HomeController_4: controllers.HomeController,
   // @LINE:8
-  CountController_1: controllers.CountController,
+  CountController_3: controllers.CountController,
   // @LINE:10
-  AsyncController_3: controllers.AsyncController,
+  AsyncController_5: controllers.AsyncController,
   // @LINE:13
-  Assets_5: controllers.Assets,
+  Assets_7: controllers.Assets,
   // @LINE:15
+<<<<<<< HEAD
   Companies_4: controllers.Companies,
   // @LINE:19
+=======
+  Companies_6: controllers.Companies,
+  // @LINE:17
+>>>>>>> 1676e4ceee33bb4933ccb8b9fd7ad0e752b1cd18
   CompanyQuery_0: controllers.CompanyQuery,
+  // @LINE:20
+  Users_2: controllers.Users,
+  // @LINE:22
+  UserQuery_1: controllers.UserQuery,
   val prefix: String
 ) extends GeneratedRouter {
 
    @javax.inject.Inject()
    def this(errorHandler: play.api.http.HttpErrorHandler,
     // @LINE:6
-    HomeController_2: controllers.HomeController,
+    HomeController_4: controllers.HomeController,
     // @LINE:8
-    CountController_1: controllers.CountController,
+    CountController_3: controllers.CountController,
     // @LINE:10
-    AsyncController_3: controllers.AsyncController,
+    AsyncController_5: controllers.AsyncController,
     // @LINE:13
-    Assets_5: controllers.Assets,
+    Assets_7: controllers.Assets,
     // @LINE:15
+<<<<<<< HEAD
     Companies_4: controllers.Companies,
     // @LINE:19
     CompanyQuery_0: controllers.CompanyQuery
   ) = this(errorHandler, HomeController_2, CountController_1, AsyncController_3, Assets_5, Companies_4, CompanyQuery_0, "/")
+=======
+    Companies_6: controllers.Companies,
+    // @LINE:17
+    CompanyQuery_0: controllers.CompanyQuery,
+    // @LINE:20
+    Users_2: controllers.Users,
+    // @LINE:22
+    UserQuery_1: controllers.UserQuery
+  ) = this(errorHandler, HomeController_4, CountController_3, AsyncController_5, Assets_7, Companies_6, CompanyQuery_0, Users_2, UserQuery_1, "/")
+>>>>>>> 1676e4ceee33bb4933ccb8b9fd7ad0e752b1cd18
 
   import ReverseRouteContext.empty
 
   def withPrefix(prefix: String): Routes = {
     router.RoutesPrefix.setPrefix(prefix)
-    new Routes(errorHandler, HomeController_2, CountController_1, AsyncController_3, Assets_5, Companies_4, CompanyQuery_0, prefix)
+    new Routes(errorHandler, HomeController_4, CountController_3, AsyncController_5, Assets_7, Companies_6, CompanyQuery_0, Users_2, UserQuery_1, prefix)
   }
 
   private[this] val defaultPrefix: String = {
@@ -66,8 +91,13 @@ class Routes(
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies""", """controllers.Companies.getCompanies"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies""", """controllers.Companies.postCompany"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies/""" + "$" + """symbol<[^/]+>""", """controllers.CompanyQuery.getCompany(symbol:String)"""),
+<<<<<<< HEAD
     ("""PUT""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies/""" + "$" + """symbol<[^/]+>""", """controllers.CompanyQuery.updateCompany(symbol:String)"""),
     ("""DELETE""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """companies/""" + "$" + """symbol<[^/]+>""", """controllers.CompanyQuery.deleteCompany(symbol:String)"""),
+=======
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """users""", """controllers.Users.getUsers(sortingMethod:String ?= null, companyName:String ?= null)"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """users/""" + "$" + """name<[^/]+>""", """controllers.UserQuery.getUser(name:String)"""),
+>>>>>>> 1676e4ceee33bb4933ccb8b9fd7ad0e752b1cd18
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
     case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
@@ -80,7 +110,7 @@ class Routes(
     PathPattern(List(StaticPart(this.prefix)))
   )
   private[this] lazy val controllers_HomeController_index0_invoker = createInvoker(
-    HomeController_2.index,
+    HomeController_4.index,
     HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.HomeController",
@@ -97,7 +127,7 @@ class Routes(
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("count")))
   )
   private[this] lazy val controllers_CountController_count1_invoker = createInvoker(
-    CountController_1.count,
+    CountController_3.count,
     HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.CountController",
@@ -114,7 +144,7 @@ class Routes(
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("message")))
   )
   private[this] lazy val controllers_AsyncController_message2_invoker = createInvoker(
-    AsyncController_3.message,
+    AsyncController_5.message,
     HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.AsyncController",
@@ -131,7 +161,7 @@ class Routes(
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
   private[this] lazy val controllers_Assets_versioned3_invoker = createInvoker(
-    Assets_5.versioned(fakeValue[String], fakeValue[Asset]),
+    Assets_7.versioned(fakeValue[String], fakeValue[Asset]),
     HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.Assets",
@@ -148,7 +178,7 @@ class Routes(
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("companies")))
   )
   private[this] lazy val controllers_Companies_getCompanies4_invoker = createInvoker(
-    Companies_4.getCompanies,
+    Companies_6.getCompanies,
     HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.Companies",
@@ -194,6 +224,7 @@ class Routes(
     )
   )
 
+<<<<<<< HEAD
   // @LINE:21
   private[this] lazy val controllers_CompanyQuery_updateCompany7_route = Route("PUT",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("companies/"), DynamicPart("symbol", """[^/]+""",true)))
@@ -225,6 +256,39 @@ class Routes(
       "DELETE",
       """""",
       this.prefix + """companies/""" + "$" + """symbol<[^/]+>"""
+=======
+  // @LINE:20
+  private[this] lazy val controllers_Users_getUsers6_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("users")))
+  )
+  private[this] lazy val controllers_Users_getUsers6_invoker = createInvoker(
+    Users_2.getUsers(fakeValue[String], fakeValue[String]),
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.Users",
+      "getUsers",
+      Seq(classOf[String], classOf[String]),
+      "GET",
+      """""",
+      this.prefix + """users"""
+    )
+  )
+
+  // @LINE:22
+  private[this] lazy val controllers_UserQuery_getUser7_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("users/"), DynamicPart("name", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_UserQuery_getUser7_invoker = createInvoker(
+    UserQuery_1.getUser(fakeValue[String]),
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.UserQuery",
+      "getUser",
+      Seq(classOf[String]),
+      "GET",
+      """""",
+      this.prefix + """users/""" + "$" + """name<[^/]+>"""
+>>>>>>> 1676e4ceee33bb4933ccb8b9fd7ad0e752b1cd18
     )
   )
 
@@ -234,31 +298,31 @@ class Routes(
     // @LINE:6
     case controllers_HomeController_index0_route(params) =>
       call { 
-        controllers_HomeController_index0_invoker.call(HomeController_2.index)
+        controllers_HomeController_index0_invoker.call(HomeController_4.index)
       }
   
     // @LINE:8
     case controllers_CountController_count1_route(params) =>
       call { 
-        controllers_CountController_count1_invoker.call(CountController_1.count)
+        controllers_CountController_count1_invoker.call(CountController_3.count)
       }
   
     // @LINE:10
     case controllers_AsyncController_message2_route(params) =>
       call { 
-        controllers_AsyncController_message2_invoker.call(AsyncController_3.message)
+        controllers_AsyncController_message2_invoker.call(AsyncController_5.message)
       }
   
     // @LINE:13
     case controllers_Assets_versioned3_route(params) =>
       call(Param[String]("path", Right("/public")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned3_invoker.call(Assets_5.versioned(path, file))
+        controllers_Assets_versioned3_invoker.call(Assets_7.versioned(path, file))
       }
   
     // @LINE:15
     case controllers_Companies_getCompanies4_route(params) =>
       call { 
-        controllers_Companies_getCompanies4_invoker.call(Companies_4.getCompanies)
+        controllers_Companies_getCompanies4_invoker.call(Companies_6.getCompanies)
       }
   
     // @LINE:17
@@ -283,6 +347,18 @@ class Routes(
     case controllers_CompanyQuery_deleteCompany8_route(params) =>
       call(params.fromPath[String]("symbol", None)) { (symbol) =>
         controllers_CompanyQuery_deleteCompany8_invoker.call(CompanyQuery_0.deleteCompany(symbol))
+      }
+  
+    // @LINE:20
+    case controllers_Users_getUsers6_route(params) =>
+      call(params.fromQuery[String]("sortingMethod", Some(null)), params.fromQuery[String]("companyName", Some(null))) { (sortingMethod, companyName) =>
+        controllers_Users_getUsers6_invoker.call(Users_2.getUsers(sortingMethod, companyName))
+      }
+  
+    // @LINE:22
+    case controllers_UserQuery_getUser7_route(params) =>
+      call(params.fromPath[String]("name", None)) { (name) =>
+        controllers_UserQuery_getUser7_invoker.call(UserQuery_1.getUser(name))
       }
   }
 }
