@@ -25,14 +25,4 @@ public class TestCompanies {
 	companies.add(c);
     }
 
-    public static boolean deleteCompany(String symbol) {
-	for(int i=0, length=companies.size(); i<length; ++i) {
-	    if(companies.get(i).getSymbol().equals(symbol)) {
-		companies.remove(i);
-		return true;
-	    }
-	}
-	return false;
-    }
-
 }

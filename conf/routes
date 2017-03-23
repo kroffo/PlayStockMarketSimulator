@@ -14,7 +14,6 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET     /companies		    controllers.Companies.getCompanies
 
-<<<<<<< HEAD
 POST	/companies		    controllers.Companies.postCompany
 
 GET     /companies/:symbol	    controllers.CompanyQuery.getCompany(symbol: String)
@@ -22,11 +21,9 @@ GET     /companies/:symbol	    controllers.CompanyQuery.getCompany(symbol: Strin
 PUT 	/companies/:symbol	    controllers.CompanyQuery.updateCompany(symbol: String)
 
 DELETE	/companies/:symbol	    controllers.CompanyQuery.deleteCompany(symbol: String)
-=======
-GET     /companies/:symbol	    controllers.CompanyQuery.getCompany(symbol: String)
-
 
 GET     /users                      controllers.Users.getUsers(sortingMethod: String ?=null, companyName: String ?=null)
 
 GET     /users/:name                controllers.UserQuery.getUser(name: String)
->>>>>>> 1676e4ceee33bb4933ccb8b9fd7ad0e752b1cd18
+
+GET     /companies/:symbol	    controllers.CompanyQuery.getCompany(symbol: String)

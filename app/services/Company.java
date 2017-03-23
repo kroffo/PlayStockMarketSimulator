@@ -37,18 +37,11 @@ public class Company {
     }
 
     public static boolean updateCompany(String name, String symbol) {
-	Company c = getCompanyBySymbol(symbol);
-	if(c != null) {
-	    c.setName(name);
-	    return true;
-	}
-	return false;
+	return true;
     }
 
-    public void setName(String name) { this.name = name; }
-
     public static boolean deleteCompany(String symbol) {
-	return TestCompanies.deleteCompany(symbol);
+	return false;
     }    
 
     public static Company[] getCompanies() {
