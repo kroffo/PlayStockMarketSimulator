@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/kennethroffo/Documents/PlayStockMarketSimulator/conf/routes
-// @DATE:Wed Mar 22 21:33:41 EDT 2017
+// @DATE:Wed Mar 22 22:57:02 EDT 2017
 
 import play.api.routing.JavaScriptReverseRoute
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
@@ -89,6 +89,26 @@ package controllers.javascript {
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "message"})
+        }
+      """
+    )
+  
+  }
+
+  // @LINE:17
+  class ReverseCompanyQuery(_prefix: => String) {
+
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:17
+    def getCompany: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.CompanyQuery.getCompany",
+      """
+        function(symbol0) {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "companies/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("symbol", encodeURIComponent(symbol0))})
         }
       """
     )
