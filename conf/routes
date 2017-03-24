@@ -3,7 +3,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
@@ -24,10 +24,13 @@ DELETE	/companies/:symbol	    controllers.CompanyQuery.deleteCompany(symbol: Str
 
 GET     /users                      controllers.Users.getUsers(sortingMethod: String ?=null, companyName: String ?=null)
 
+POST    /users                      controllers.Users.postUsers
+
 GET     /users/:name                controllers.UserQuery.getUser(name: String)
 
-GET	/users/:name/stocks	    controllers.UserStocks.getStocks(name: String)
+PUT     /users/:name                controllers.UserQuery.updateUser(name: String)
 
-GET	/users/:name/stocks/:symbol controllers.UserCompanyStocks.getStocks(name: String, symbol: String)
+DELETE  /users/:name                controllers.UserQuery.deleteUser(name: String)
 
-POST	/users/:name/stocks/:symbol controllers.UserCompanyStocks.performTransaction(name: String, symbol: String)
+GET     /companies/:symbol	    controllers.CompanyQuery.getCompany(symbol: String)
+
