@@ -28,7 +28,7 @@ POST    /users                      controllers.Users.postUsers
 
 GET     /users/:name                controllers.UserQuery.getUser(name: String)
 
-PUT     /users                      controllers.UserQuery.updateUser(name: String)
+PUT     /users/:name                controllers.UserQuery.updateUser(name: String)
 
 DELETE  /users/:name                controllers.UserQuery.deleteUser(name: String)
 

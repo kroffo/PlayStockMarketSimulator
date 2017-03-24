@@ -3,6 +3,7 @@ package controllers;
 import play.mvc.*;
 
 import views.html.*;
+import play.mvc.BodyParser.Json;
 
 import services.User;
 import services.Company;
@@ -13,6 +14,8 @@ import java.io.InputStreamReader;
 import java.io.InputStream;
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class Users extends Controller {
 
     //GET
@@ -22,7 +25,7 @@ public class Users extends Controller {
 	services.User temp;
 	String json = "";
 	if(users == null)
-	    return ok("INTERNAL SERVER ERROR (500)");
+	    return status(500);
 	if(sortingMethod != null) {
 	    if(!sortingMethod.equals("stocks") || companyName == null) {
 		if (sortingMethod.equals("money")){
@@ -159,7 +162,7 @@ public class Users extends Controller {
 	    || name.equals("") )
 	    return status(400);
 	
-	services.User u = services.User.loadUser(name);
+	services.User u = services.User.getUser(name);
 	if(u != null) {
 	    return status(409);
 		}

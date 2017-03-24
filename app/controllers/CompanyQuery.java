@@ -23,7 +23,7 @@ public class CompanyQuery extends Controller {
 
 	services.Company c = services.Company.getCompanyBySymbol(sym);
 	if(c == null) {
-	    return badRequest("Bad Request");
+	    return status(404);
 	}
 	
 	String json = getJsonForCompany(c);

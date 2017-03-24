@@ -3,6 +3,7 @@ package controllers;
 import play.mvc.*;
 
 import views.html.*;
+import play.mvc.BodyParser.Json;
 
 import services.User;
 import org.json.JSONObject;
@@ -11,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.InputStream;
 import java.io.IOException;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class UserQuery extends Controller {
     
@@ -32,16 +35,11 @@ public class UserQuery extends Controller {
 	if (json == null)
 	    return badRequest("Expecting Json data");
 
-	services.User u = services.User.loadUser(name);
+	services.User u = services.User.getUser(name);
 	if (u == null) { 
 	    return status(404, "User with the name " + name + "does not exist."); 
 	}
 	
-	String json = "";
-	try {
-	    BufferedReader in = new BufferedReader(new InputStreamReader(data));
-	    String line = null;
-	    
 	    String password = json.findPath("password").textValue();
 
 	    if(password == null)
@@ -51,15 +49,12 @@ public class UserQuery extends Controller {
 		return status(500);
 	    }
 	    
-	} catch(IOException | JSONException e) {
-	    return status(400);
-	}
-	return status(204);
+	    return status(204);
     }
     
     //DELETE
     public Result deleteUser( String name ) {
-	services.User u = services.User.loadUser(name);
+	services.User u = services.User.getUser(name);
 	if(u == null) {
 	    return status(404);
 	}
