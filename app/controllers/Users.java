@@ -151,27 +151,28 @@ public class Users extends Controller {
     
     //POST
     @BodyParser.Of(Json.class)
-	public Result postUsers () {
+	public Result postUser () {
 	JsonNode json = request().body().asJson();
 	if(json == null)
 	    return badRequest("Expecting Json data");
 	
 	String name = json.findPath("name").textValue();
 	String password = json.findPath("password").textValue();
-	if( name == null || password == null || password.equals("")
-	    || name.equals("") )
-	    return status(400);
+	if(name == null || name.equals(""))
+	    return badRequest("Missing parameter [name]");
+	if(password == null || password.equals(""))
+	    return badRequest("Missing parameter [password]");
 	
 	services.User u = services.User.getUser(name);
 	if(u != null) {
-	    return status(409);
+	    return status(409, "User with name " + name + " already exists.");
 		}
 	
 	if(!services.User.addUser(name, password)) {
-	    return status(500);
+	    return internalServerError();
 	}
 	
-	return status(201);
+	return created();
     }
     
     

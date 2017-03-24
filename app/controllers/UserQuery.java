@@ -22,7 +22,7 @@ public class UserQuery extends Controller {
 	
 	services.User u = services.User.getUser(name);	    
 	if(u == null) {
-	    return status(500);
+	    return status(404);
 	}
 	
 	String json = getJsonForUser(u);
@@ -46,7 +46,7 @@ public class UserQuery extends Controller {
 		return badRequest("Missing parameter [password]");
 	    
 	    if (!services.User.updateUser(name, password)){
-		return status(500);
+		return internalServerError();
 	    }
 	    
 	    return status(204);
@@ -60,7 +60,7 @@ public class UserQuery extends Controller {
 	}
 	
 	if(!services.User.deleteUser(name)) {
-	    return status(500);
+	    return internalServerError();
 	}
 	String json = getJsonForUser(u);
 	return ok(json);
