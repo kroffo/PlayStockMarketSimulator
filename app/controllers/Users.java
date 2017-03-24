@@ -19,133 +19,85 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class Users extends Controller {
 
     //GET
-    public Result getUsers(String sortingMethod, String companyName) {
+    public Result getUsers(String sortingMethod, String symbol) {
 	services.User[] users = services.User.getUsers();
 	services.Company[] companies = services.Company.getCompanies();
-	services.User temp;
+	
 	String json = "";
-	if(users == null)
-	    return status(500);
 	if(sortingMethod != null) {
-	    if(!sortingMethod.equals("stocks") || companyName == null) {
-		if (sortingMethod.equals("money")){
-		    for (int i = 0; i < users.length; ++i) {
-			for (int j = i + 1; j < users.length; ++j) {
-			    if (users[j].getMoney() > users[i].getMoney()) {
-				temp = users[i];
-				users[i] = users[j];
-				users[j] = temp;
-			    }
-			}
-		    }
-		    
-		} else if (sortingMethod.equals("total_money")) {
-		    for (int i = 0; i < users.length; ++i) {
-			double totalMoneyI = users[i].getMoney() + users[i].getStockValue();
-			for (int j = i + 1; j < users.length; ++j) {
-			    double totalMoneyJ = users[j].getMoney() + users[j].getStockValue();
-			    if (totalMoneyJ > totalMoneyI) {
-				temp = users[i];
+	    if (sortingMethod.equals("stocks") && symbol != null) {
+		services.Company company = services.Company.getCompanyBySymbol(symbol);
+		if(company != null) {
+		    String companyName = company.getName();
+		    for (int i = 0; i <users.length; ++i) {
+			for (int j = i + 1; j <users.length; ++j) {
+			    if (users[j].getNumberOfStocks(companyName) > users[i].getNumberOfStocks(companyName)) {
+				services.User temp = users[i];
 				users[i] = users[j];
 				users[j] = temp;
 			    }
 			}
 		    }
 		}
-		json = "[\n";
-		for(int i = 0, length = users.length; i < length; ++i) {
-		    services.User u = users[i];
-		    String currentPath = request().host() + request().path();
-		    String uname = u.getName();
-		    double totalMoney = u.getMoney() + u.getStockValue();
-		    json += "  {\n";
-		    json += "    \"name\": \"" + uname + "\",\n";
-		    json += "    \"password\": \"" + u.getPassword() + "\",\n";
-		    json += "    \"money\": " + u.getMoney() + ",\n";
-		    json += "    \"stockValue\": " + u.getStockValue() + ",\n";
-		    json += "    \"totalMoney\": " + totalMoney + ",\n";
-		    json += "    \"links\": [\n";
-		    json += "      {\n";
-		    json += "        \"rel\": \"self\",\n";
-		    json += "        \"href\": \"" + currentPath + "/" + uname + "\"\n";;
-		    json += "      }\n";
-		    json += "    ]\n";
-		    json += "  }";
-		    if(i < length - 1)
-			json += ",";
-		    json += "\n";
-		}
-		json += "]";
-	    } else if (sortingMethod.equals("stocks") && companyName != null) {
-		for (int i = 0; i <users.length; ++i) {
-		    for (int j = i + 1; j <users.length; ++j) {
-			if (users[j].getNumberOfStocks(companyName) > users[i].getNumberOfStocks(companyName)) {
-			    temp = users[i];
+	    } else if (sortingMethod.equals("money")) {
+		for (int i = 0; i < users.length; ++i) {
+		    for (int j = i + 1; j < users.length; ++j) {
+			if (users[j].getMoney() > users[i].getMoney()) {
+			    services.User temp = users[i];
 			    users[i] = users[j];
 			    users[j] = temp;
 			}
 		    }
 		}
-		
-		json = "[\n";
-		json += "{";
-		json += "\"users\" : [";
+	    } else if (sortingMethod.equals("total_money")) {
 		for (int i = 0; i < users.length; ++i) {
-		    services.User u = users[i];
-		    services.Company company = services.Company.getCompany(companyName);
-		    String currentPath = request().host() + request().path();
-		    String uname = u.getName();
-		    int row = i+1;
-		    double total;
-		    json += "{";
-		    json += "\"name\" : \"" + u.getName() + "\",";
-		    int stocks = u.getNumberOfStocks(companyName);
-		    json += "\"numberStocks\" : " + stocks + ",";
-		    double averagePrice = u.getAveragePurchasePrice(companyName);
-		    json += "\"averagePrice\" : " + String.format("%.2f", averagePrice) + ",";
-		    total = stocks * averagePrice;
-		    json += "\"totalInvestment\" : "+ String.format("%.2f", total);
-		    json +="}";
-		    json += "    \"links\": [\n";
-		    json += "      {\n";
-		    json += "        \"rel\": \"self\",\n";
-		    json += "        \"href\": \"" + currentPath + "/" + uname + "\"\n";;
-		    json += "      }\n";
-		    json += "    ]\n";
-		    if (i != users.length - 1)
-			json += ",";
+		    double totalMoneyI = users[i].getMoney() + users[i].getStockValue();
+		    for (int j = i + 1; j < users.length; ++j) {
+			double totalMoneyJ = users[j].getMoney() + users[j].getStockValue();
+			if (totalMoneyJ > totalMoneyI) {
+			    services.User temp = users[i];
+			    users[i] = users[j];
+			    users[j] = temp;
+			}
+		    }
 		}
-		json += "]\n";
-		json += "}\n";
-		json += "]";
 	    }
-	} else {
-	    json = "[\n";
-	    for(int i = 0, length = users.length; i < length; ++i) {
-		services.User u = users[i];
-		String currentPath = request().host() + request().path();
-		String uname = u.getName();
-		double totalMoney = u.getMoney() + u.getStockValue();
-		json += "  {\n";
-		json += "    \"name\": \"" + uname + "\",\n";
-		json += "    \"password\": \"" + u.getPassword() + "\",\n";
-		json += "    \"money\": " + u.getMoney() + ",\n";
-		json += "    \"stockValue\": " + u.getStockValue() + ",\n";
-		json += "    \"totalMoney\": " + totalMoney + ",\n";
-		json += "    \"links\": [\n";
-		json += "      {\n";
-		json += "        \"rel\": \"self\",\n";
-		json += "        \"href\": \"" + currentPath + "/" + uname + "\"\n";;
-		json += "      }\n";
-		json += "    ]\n";
-		json += "  }";
-		if(i < length - 1)
-		    json += ",";
-		json += "\n";
-	    }
-	    json += "]";
 	}
-
+	
+	json += "[\n";
+	for(int i = 0, length = users.length; i < length; ++i) {
+	    services.User u = users[i];
+	    String currentPath = request().host() + request().path();
+	    String uname = u.getName();
+	    double totalMoney = u.getMoney() + u.getStockValue();
+	    json += "  {\n";
+	    json += "    \"name\": \"" + uname + "\",\n";
+	    json += "    \"password\": \"" + u.getPassword() + "\",\n";
+	    json += "    \"money\": " + u.getMoney() + ",\n";
+	    json += "    \"stockValue\": " + u.getStockValue() + ",\n";
+	    json += "    \"totalMoney\": " + totalMoney + ",\n";
+	    json += "    \"stocks\": {\n";
+	    for(services.Company c : companies) {
+		json += "      \"" + c.getName() + "\": {\n";
+		String cname = c.getName();
+		json += "        \"stocks\": " + u.getNumberOfStocks(cname) + ",\n";
+		json += "        \"averagePurchasePrice\": " + u.getAveragePurchasePrice(cname) + ",\n";
+		json += "      }\n";
+	    }
+	    json += "    }\n";
+	    json += "    \"links\": [\n";
+	    json += "      {\n";
+	    json += "        \"rel\": \"self\",\n";
+	    json += "        \"href\": \"" + currentPath + "/" + uname + "\"\n";;
+	    json += "      }\n";
+	    json += "    ]\n";
+	    json += "  }";
+	    if(i < length - 1)
+		json += ",";
+	    json += "\n";
+	}
+	json += "]";
+	
 	return ok(json);
     }
     
