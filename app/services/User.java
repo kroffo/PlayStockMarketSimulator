@@ -128,12 +128,20 @@ public class User {
 	return averagePrices.get(cname);
     }
 
-    public static boolean updateUser(String name, String password) {
-	return true;
+    public static boolean deleteUser(String name) {
+	return TestUsers.deleteUser(name) != null;
     }
 
-    public static boolean deleteUser(String name) {
+    public static boolean updateUser(String name, String password) {
+	User u = TestUsers.getUser(name);
+	if(u != null) {
+	    u.setPassword(password);
+	    return true;
+	}
 	return false;
     }
+
+    //temp method to test REST API, remove once database is hooked up
+    public void setPassword(String password) { this.password = password; }
 }
     
