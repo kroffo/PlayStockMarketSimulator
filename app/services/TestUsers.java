@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class TestUsers {
     private static ArrayList<User> users = new ArrayList<>();
+    static boolean u = User.addUser("Kenny", "adsf");
     
     public static void addUser(User user) {
 	users.add(user);

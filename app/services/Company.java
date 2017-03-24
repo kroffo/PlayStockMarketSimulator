@@ -37,11 +37,19 @@ public class Company {
     }
 
     public static boolean updateCompany(String name, String symbol) {
-	return true;
+	Company c = TestCompanies.getCompany(symbol);
+	if(c != null) {
+	    c.setName(name);
+	    return true;
+	}
+	return false;
     }
 
+    // REMOVE THIS ONCE THE DATABASE IS HOOKED UP, AND updateCompany() IS REWRITTEN
+    public void setName(String name) { this.name = name; }
+
     public static boolean deleteCompany(String symbol) {
-	return false;
+	return TestCompanies.deleteCompany(symbol) != null;
     }    
 
     public static Company[] getCompanies() {

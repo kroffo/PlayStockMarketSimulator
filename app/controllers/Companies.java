@@ -22,8 +22,6 @@ public class Companies extends Controller {
 	//updatePrices();
 	
 	services.Company[] companies = services.Company.getCompanies();
-	if(companies == null)
-	    return badRequest("Bad Request");
 
 	String json = "[\n";
 	for(int i=0, length=companies.length; i<length; ++i) {

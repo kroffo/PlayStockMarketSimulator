@@ -26,4 +26,8 @@ GET     /users                      controllers.Users.getUsers(sortingMethod: St
 
 GET     /users/:name                controllers.UserQuery.getUser(name: String)
 
-GET     /companies/:symbol	    controllers.CompanyQuery.getCompany(symbol: String)
+GET	/users/:name/stocks	    controllers.UserStocks.getStocks(name: String)
+
+GET	/users/:name/stocks/:symbol controllers.UserCompanyStocks.getStocks(name: String, symbol: String)
+
+POST	/users/:name/stocks/:symbol controllers.UserCompanyStocks.performTransaction(name: String, symbol: String)
