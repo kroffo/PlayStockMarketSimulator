@@ -24,8 +24,6 @@ public class Users extends Controller {
 	services.Company[] companies = services.Company.getCompanies();
 	services.User temp;
 	String json = "";
-	if(users == null)
-	    return status(500);
 	if(sortingMethod != null) {
 	    if(!sortingMethod.equals("stocks") || companyName == null) {
 		if (sortingMethod.equals("money")){

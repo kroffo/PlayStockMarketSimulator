@@ -22,7 +22,7 @@ public class UserQuery extends Controller {
 	
 	services.User u = services.User.getUser(name);	    
 	if(u == null) {
-	    return status(500);
+	    return status(404);
 	}
 	
 	String json = getJsonForUser(u);
