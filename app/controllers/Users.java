@@ -77,14 +77,18 @@ public class Users extends Controller {
 	    json += "    \"stockValue\": " + u.getStockValue() + ",\n";
 	    json += "    \"totalMoney\": " + totalMoney + ",\n";
 	    json += "    \"stocks\": {\n";
-	    for(services.Company c : companies) {
+	    for(int j=0, jlength=companies.length; j<length; ++j) {
+		services.Company c = companies[j];
 		json += "      \"" + c.getName() + "\": {\n";
 		String cname = c.getName();
 		json += "        \"stocks\": " + u.getNumberOfStocks(cname) + ",\n";
 		json += "        \"averagePurchasePrice\": " + u.getAveragePurchasePrice(cname) + ",\n";
-		json += "      }\n";
+		json += "      }";
+		if(i != jlength-1)
+		    json += ",";
+		json += "\n";
 	    }
-	    json += "    }\n";
+	    json += "    },\n";
 	    json += "    \"links\": [\n";
 	    json += "      {\n";
 	    json += "        \"rel\": \"self\",\n";

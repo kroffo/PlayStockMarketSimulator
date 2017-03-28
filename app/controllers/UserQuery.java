@@ -67,11 +67,25 @@ public class UserQuery extends Controller {
     }
      
     private String getJsonForUser(services.User u) {
+	services.Company[] companies = services.Company.getCompanies();
 	String json = "{\n";
-	json += " \"name\": \"" + u.getName() + "\",\n";
-	json += " \"password\": \"" + u.getPassword() + "\",\n";
-	json += " \"money\": " + u.getMoney() + ",\n";
-	json += " \"stockValue\": " + u.getStockValue() + "\n";
+	json += "  \"name\": \"" + u.getName() + "\",\n";
+	json += "  \"password\": \"" + u.getPassword() + "\",\n";
+	json += "  \"money\": " + u.getMoney() + ",\n";
+	json += "  \"stockValue\": " + u.getStockValue() + ",\n";
+	json += "  \"stocks\": {\n";
+	for(int i=0, length=companies.length; i<length; ++i) {
+	    services.Company c = companies[i];
+	    json += "    \"" + c.getName() + "\": {\n";
+	    String cname = c.getName();
+	    json += "      \"stocks\": " + u.getNumberOfStocks(cname) + ",\n";
+	    json += "      \"averagePurchasePrice\": " + u.getAveragePurchasePrice(cname) + ",\n";
+	    json += "    }";
+	    if(i != length-1)
+		json += ",";
+	    json += "\n";
+	}
+	json += "  }\n";
 	json += "}";
 	return json;
     }
