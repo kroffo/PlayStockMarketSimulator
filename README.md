@@ -1,57 +1,45 @@
-[<img src="https://img.shields.io/travis/playframework/play-java-starter-example.svg"/>](https://travis-ci.org/playframework/play-java-starter-example)
+# PlayStockMarketSimulator
+A stock market simulator application (and much more) designed and built for my Web Services course at SUNY Oswego in collaboration with fellow student Stephen DiCerce. This rendition of the system was built using Java Play.
 
-# Play Java Starter
-
-This is a starter application that shows how Play works.  Please see the documentation at https://www.playframework.com/documentation/latest/Home for more details.
-
-## Running
-
-Run this using [sbt](http://www.scala-sbt.org/).  If you downloaded this project from http://www.playframework.com/download then you'll find a prepackaged version of sbt in the project directory:
-
+To run the application, you must have MySQL running on port 3306 of the same machine, the calls use localhost. Once MySQL is installed, and in your path, enter into the command prompt:
 ```
-sbt run
+    mysql -u root -p
+    CREATE DATABASE playstocksim;
+    USE playstocksim;
+    CREATE TABLE Users (
+        name VARCHAR(40),
+        password VARCHAR(40),
+        money DOUBLE PRECISION,
+        PRIMARY KEY (name)
+    );
+    CREATE TABLE Companies (
+        name VARCHAR(40),
+        symbol VARCHAR(10),
+        stockValue DOUBLE PRECISION,
+        availableStocks INT,
+        PRIMARY KEY (symbol)
+    );
+    CREATE TABLE Stocks (
+        user VARCHAR(40),
+        company VARCHAR(40),
+        number INT,
+        averagePrice DOUBLE PRECISION,
+        PRIMARY KEY (user, company)
+    );
+    GRANT ALL ON playstocksim.* TO 'playstocksimuser' IDENTIFIED BY 'playstocksimpassword';
+    INSERT INTO Companies VALUES('Advanced Micro Devices', 'AMD', 50, 100);
+    INSERT INTO Companies VALUES('Allstate', 'ALL', 50, 100);
+    INSERT INTO Companies VALUES('American Express', 'AXP', 50, 100);
+    INSERT INTO Companies VALUES('Apple Inc.', 'AAPL', 50, 100);
+    INSERT INTO Companies VALUES('Bitcoin', 'NYXBT', 50, 100);
+    INSERT INTO Companies VALUES('Google', 'GOOG', 50, 100);
+    INSERT INTO Companies VALUES('Intel Corporation', 'INTC', 50, 100);
+    INSERT INTO Companies VALUES('McDonalds', 'MCD', 50, 100);
+    INSERT INTO Companies VALUES('Microsoft', 'MSFT', 50, 100);
+    INSERT INTO Companies VALUES('Ninetndo Co.', 'NTDOY', 50, 100);
+    INSERT INTO Companies VALUES('Snapchat', 'SNAP', 50, 100);
+    INSERT INTO Companies VALUES('Yahoo', 'YHOO', 50, 100);
+    
 ```
 
-And then go to http://localhost:9000 to see the running web application.
-
-## Controllers
-
-There are several demonstration files available in this template.
-
-- HomeController.java:
-
-  Shows how to handle simple HTTP requests.
-
-- AsyncController.java:
-
-  Shows how to do asynchronous programming when handling a request.
-
-- CountController.java:
-
-  Shows how to inject a component into a controller and use the component when
-  handling requests.
-
-## Components
-
-- Module.java:
-
-  Shows how to use Guice to bind all the components needed by your application.
-
-- Counter.java:
-
-  An example of a component that contains state, in this case a simple counter.
-
-- ApplicationTimer.java:
-
-  An example of a component that starts when the application starts and stops
-  when the application stops.
-
-## Filters
-
-- Filters.java:
-
-  Creates the list of HTTP filters used by your application.
-
-- ExampleFilter.java
-
-  A simple filter that adds a header to every response.
+Once the SQL database has been set up, run the application with sbt run, and go to localhost:9000 in your browser!
