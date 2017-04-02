@@ -5,7 +5,7 @@ import play.mvc.*;
 import views.html.*;
 import play.mvc.BodyParser.Json;
 
-import services.User;
+import models.User;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.io.BufferedReader;
@@ -20,7 +20,7 @@ public class UserQuery extends Controller {
     //GET
     public Result getUser(String name) {
 	
-	services.User u = services.User.getUser(name);	    
+	models.User u = models.User.getUser(name);	    
 	if(u == null) {
 	    return status(404);
 	}
@@ -35,7 +35,7 @@ public class UserQuery extends Controller {
 	if (json == null)
 	    return badRequest("Expecting Json data");
 
-	services.User u = services.User.getUser(name);
+	models.User u = models.User.getUser(name);
 	if (u == null) { 
 	    return status(404, "User with the name " + name + "does not exist."); 
 	}
@@ -45,7 +45,7 @@ public class UserQuery extends Controller {
 	    if(password == null)
 		return badRequest("Missing parameter [password]");
 	    
-	    if (!services.User.updateUser(name, password)){
+	    if (!models.User.updateUser(name, password)){
 		return internalServerError();
 	    }
 	    
@@ -54,20 +54,20 @@ public class UserQuery extends Controller {
     
     //DELETE
     public Result deleteUser( String name ) {
-	services.User u = services.User.getUser(name);
+	models.User u = models.User.getUser(name);
 	if(u == null) {
 	    return status(404);
 	}
 	
-	if(!services.User.deleteUser(name)) {
+	if(!models.User.deleteUser(name)) {
 	    return internalServerError();
 	}
 	String json = getJsonForUser(u);
 	return ok(json);
     }
      
-    private String getJsonForUser(services.User u) {
-	services.Company[] companies = services.Company.getCompanies();
+    private String getJsonForUser(models.User u) {
+	models.Company[] companies = models.Company.getCompanies();
 	String json = "{\n";
 	json += "  \"name\": \"" + u.getName() + "\",\n";
 	json += "  \"password\": \"" + u.getPassword() + "\",\n";
@@ -75,7 +75,7 @@ public class UserQuery extends Controller {
 	json += "  \"stockValue\": " + u.getStockValue() + ",\n";
 	json += "  \"stocks\": {\n";
 	for(int i=0, length=companies.length; i<length; ++i) {
-	    services.Company c = companies[i];
+	    models.Company c = companies[i];
 	    json += "    \"" + c.getName() + "\": {\n";
 	    String cname = c.getName();
 	    json += "      \"stocks\": " + u.getNumberOfStocks(cname) + ",\n";

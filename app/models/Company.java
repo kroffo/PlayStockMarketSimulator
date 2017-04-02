@@ -1,19 +1,38 @@
-package services;
+package models;
 
-import java.util.ArrayList;
-import java.lang.NullPointerException;
-import org.json.JSONObject;
-import org.json.JSONArray;
+import java.util.*;//ArrayList;
 
-public class Company {
+import javax.persistence.*;
+import com.avaje.ebean.Model;
+
+import play.data.format.*;
+import play.data.validation.*;
+
+@Entity
+@Table(name="Companies")
+public class Company extends Model {
     private static final int DEFAULT_NUMBER_OF_STOCKS = 100;
     private static final int DEFAULT_STOCK_VALUE = 50;
 
+    public static Finder<String, Company> find = new Finder<>(Company.class);
+    
+    @Constraints.Required
     private String name;
+
+    @Id
+    @Constraints.Required
     private String symbol;
+
+    @Constraints.Required
     private double stockValue;
+
+    @Constraints.Required
     private int stocksAvailable;
-	
+
+    @OneToMany(mappedBy = "company")
+    private Set<Stocks> stocks;
+
+    // MAKE PRIVATE WHEN TESTCOMPANIES IS DELETED
     public Company(String n, String sym, double sv, int as) {
 	name = n;
 	symbol = sym;
@@ -32,28 +51,53 @@ public class Company {
     // }
 
     public static boolean addCompany(String name, String symbol) {
-	TestCompanies.addCompany(new Company(name, symbol, DEFAULT_STOCK_VALUE, DEFAULT_NUMBER_OF_STOCKS));
+	Company c = new Company(name, symbol, DEFAULT_STOCK_VALUE, DEFAULT_NUMBER_OF_STOCKS);
+	c.save();
+	
+	Set<Stocks> stocks = new HashSet<>();
+	User[] users = User.getUsers();
+	for(User u : users) {
+	    Stocks stock = new Stocks();
+	    stocks.add(stock);
+	    stock.setCompany(c);
+	    u.addStocks(stock);
+	    stock.setUser(u);
+	    
+	    u.update();
+	    stock.save();
+	}
+
+	c.setStocks(stocks);
+	c.update();
 	return true;
     }
 
+    public void setStocks(Set<Stocks> stockSet) {
+	stocks = stockSet;
+    }
+
+    public void addStocks(Stocks stock) {
+	stocks.add(stock);
+    }
+
     public static boolean updateCompany(String name, String symbol) {
-	Company c = TestCompanies.getCompany(symbol);
-	if(c != null) {
-	    c.setName(name);
-	    return true;
-	}
-	return false;
+	Company c = getCompanyBySymbol(symbol);
+	c.setName(name);
+	c.update();
+	return true;
     }
 
     // REMOVE THIS ONCE THE DATABASE IS HOOKED UP, AND updateCompany() IS REWRITTEN
     public void setName(String name) { this.name = name; }
 
     public static boolean deleteCompany(String symbol) {
-	return TestCompanies.deleteCompany(symbol) != null;
+	// Must write this...
+	return false;
     }    
 
     public static Company[] getCompanies() {
-	return TestCompanies.getCompanies();
+	List<Company> companyList = Company.find.all();
+	return companyList.toArray(new Company[companyList.size()]);
     }
     
     public static Company getCompany(String name) {
@@ -65,11 +109,8 @@ public class Company {
     }
 
     public static Company getCompanyBySymbol(String sym) {
-	Company[] companies = getCompanies();
-	for(Company c : companies)
-	    if(c.getSymbol().equals(sym))
-	       return c;
-	return null;
+	Company company = Company.find.byId(sym);
+	return company;
     }
 
     public String getName() {

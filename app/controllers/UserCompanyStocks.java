@@ -5,8 +5,8 @@ import play.mvc.BodyParser.Json;
 
 import views.html.*;
 
-import services.User;
-import services.Company;
+import models.User;
+import models.Company;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -16,8 +16,8 @@ public class UserCompanyStocks extends Controller {
 
 	//updatePrices();
 
-	services.User user = services.User.getUser(name);
-	services.Company company = services.Company.getCompanyBySymbol(symbol);
+	models.User user = models.User.getUser(name);
+	models.Company company = models.Company.getCompanyBySymbol(symbol);
 	if(user == null) {
 	    return status(404);
 	}
@@ -29,7 +29,7 @@ public class UserCompanyStocks extends Controller {
 	return ok(json);
     }
 
-    private String getUserCompanyStockJSON(services.User user, services.Company company) {
+    private String getUserCompanyStockJSON(models.User user, models.Company company) {
 	String json = "{\n";
 	String cname = company.getName();
 	json += "  \"price\": " + company.getStockValue() + ",\n";
@@ -43,8 +43,8 @@ public class UserCompanyStocks extends Controller {
     @BodyParser.Of(Json.class)
     public Result performTransaction(String name, String symbol) {
 	
-	services.User user = services.User.getUser(name);
-	services.Company company = services.Company.getCompanyBySymbol(symbol);
+	models.User user = models.User.getUser(name);
+	models.Company company = models.Company.getCompanyBySymbol(symbol);
 	if(user == null) {
 	    return status(404);
 	}
@@ -95,12 +95,12 @@ public class UserCompanyStocks extends Controller {
     
     // // Updates the stock prices of the companies.
     // public void updatePrices() {
-    // 	services.Company[] companies = services.Company.getCompanies();
+    // 	models.Company[] companies = models.Company.getCompanies();
     // 	String[] symbols = new String[companies.length];
     // 	for(int i=0, length=companies.length; i<length; ++i) {
     // 	    symbols[i] = companies[i].getSymbol();
     // 	}
-    // 	services.StockReader.updateStocks(symbols);
+    // 	models.StockReader.updateStocks(symbols);
     // }
 
 }
