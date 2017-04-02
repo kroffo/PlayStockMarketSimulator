@@ -7,22 +7,22 @@ To run the application, you must have MySQL running on port 3306 of the same mac
     CREATE DATABASE playstocksim;
     USE playstocksim;
     CREATE TABLE Users (
-        name VARCHAR(40),
-        password VARCHAR(40),
-        money DOUBLE PRECISION,
+        name VARCHAR(255) NOT NULL,
+        money DOUBLE,
+        password VARCHAR(255),
         PRIMARY KEY (name)
     );
     CREATE TABLE Companies (
-        name VARCHAR(40),
-        symbol VARCHAR(10),
-        stockValue DOUBLE PRECISION,
+        name VARCHAR(255),
+        symbol VARCHAR(255),
+        stockValue DOUBLE,
         availableStocks INT,
         PRIMARY KEY (symbol)
     );
     CREATE TABLE Stocks (
-        user VARCHAR(40),
-        company VARCHAR(40),
-        number INT,
+        name VARCHAR(255),
+        symbol VARCHAR(255),
+        stocks INT,
         averagePrice DOUBLE PRECISION,
         PRIMARY KEY (user, company)
     );
