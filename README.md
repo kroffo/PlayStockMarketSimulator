@@ -27,18 +27,18 @@ To run the application, you must have MySQL running on port 3306 of the same mac
         PRIMARY KEY (name, symbol)
     );
     GRANT ALL ON playstocksim.* TO 'playstocksimuser' IDENTIFIED BY 'playstocksimpassword';
-    INSERT INTO Companies VALUES('Advanced Micro Devices', 'AMD', 50, 100);
-    INSERT INTO Companies VALUES('Allstate', 'ALL', 50, 100);
-    INSERT INTO Companies VALUES('American Express', 'AXP', 50, 100);
-    INSERT INTO Companies VALUES('Apple Inc.', 'AAPL', 50, 100);
-    INSERT INTO Companies VALUES('Bitcoin', 'NYXBT', 50, 100);
-    INSERT INTO Companies VALUES('Google', 'GOOG', 50, 100);
-    INSERT INTO Companies VALUES('Intel Corporation', 'INTC', 50, 100);
-    INSERT INTO Companies VALUES('McDonalds', 'MCD', 50, 100);
-    INSERT INTO Companies VALUES('Microsoft', 'MSFT', 50, 100);
-    INSERT INTO Companies VALUES('Ninetndo Co.', 'NTDOY', 50, 100);
-    INSERT INTO Companies VALUES('Snapchat', 'SNAP', 50, 100);
-    INSERT INTO Companies VALUES('Yahoo', 'YHOO', 50, 100);
+    INSERT INTO Companies VALUES('AMD', 'Advanced Micro Devices', 50, 100);
+    INSERT INTO Companies VALUES('ALL', 'Allstate',  50, 100);
+    INSERT INTO Companies VALUES('AXP', 'American Express', 50, 100);
+    INSERT INTO Companies VALUES('AAPL', 'Apple Inc.', 50, 100);
+    INSERT INTO Companies VALUES('NYXBT', 'Bitcoin', 50, 100);
+    INSERT INTO Companies VALUES('GOOG', 'Google', 50, 100);
+    INSERT INTO Companies VALUES('INTC', 'Intel Corporation', 50, 100);
+    INSERT INTO Companies VALUES('MCD', 'McDonalds', 50, 100);
+    INSERT INTO Companies VALUES('MSFT', 'Microsoft', 50, 100);
+    INSERT INTO Companies VALUES('NTDOY', 'Ninetndo Co.', 50, 100);
+    INSERT INTO Companies VALUES('SNAP', 'Snapchat', 50, 100);
+    INSERT INTO Companies VALUES('YHOO', 'Yahoo', 50, 100);
     
 ```
 
