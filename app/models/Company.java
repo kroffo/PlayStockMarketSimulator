@@ -99,14 +99,6 @@ public class Company extends Model {
 	List<Company> companyList = Company.find.all();
 	return companyList.toArray(new Company[companyList.size()]);
     }
-    
-    public static Company getCompany(String name) {
-	Company[] companies = getCompanies();
-	for(Company c : companies)
-	    if(c.getName().equals(name))
-	       return c;
-	return null;
-    }
 
     public static Company getCompanyBySymbol(String sym) {
 	Company company = Company.find.byId(sym);
