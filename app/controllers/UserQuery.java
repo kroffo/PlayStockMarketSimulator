@@ -76,10 +76,10 @@ public class UserQuery extends Controller {
 	json += "  \"stocks\": {\n";
 	for(int i=0, length=companies.length; i<length; ++i) {
 	    models.Company c = companies[i];
+	    String csym = c.getSymbol();
 	    json += "    \"" + c.getName() + "\": {\n";
-	    String cname = c.getName();
-	    json += "      \"stocks\": " + u.getNumberOfStocks(cname) + ",\n";
-	    json += "      \"averagePurchasePrice\": " + u.getAveragePurchasePrice(cname) + ",\n";
+	    json += "      \"stocks\": " + u.getNumberOfStocks(csym) + ",\n";
+	    json += "      \"averagePurchasePrice\": " + u.getAveragePurchasePrice(csym) + ",\n";
 	    json += "    }";
 	    if(i != length-1)
 		json += ",";

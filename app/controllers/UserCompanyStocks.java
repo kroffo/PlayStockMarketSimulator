@@ -31,11 +31,11 @@ public class UserCompanyStocks extends Controller {
 
     private String getUserCompanyStockJSON(models.User user, models.Company company) {
 	String json = "{\n";
-	String cname = company.getName();
+	String csym = company.getSymbol();
 	json += "  \"price\": " + company.getStockValue() + ",\n";
 	json += "  \"available\": " + company.getNumberOfAvailableStocks() + ",\n";
-	json += "  \"stocks\": " + user.getNumberOfStocks(cname) + ",\n";
-	json += "  \"averagePurchasePrice\": " + user.getAveragePurchasePrice(cname) + "\n";
+	json += "  \"stocks\": " + user.getNumberOfStocks(csym) + ",\n";
+	json += "  \"averagePurchasePrice\": " + user.getAveragePurchasePrice(csym) + "\n";
 	json += "}";
 	return json;
     }
@@ -63,27 +63,28 @@ public class UserCompanyStocks extends Controller {
 
 	String json = "";
 	String cname = company.getName();
+        String csym = company.getSymbol();
 	if(action.equals("buy")) {
-	    if(user.purchaseStock(cname)) {
+	    if(user.purchaseStock(csym)) {
 		json = "{ ";
 		json += "\"status\" : \"success\","; 
 		json += "\"balance\" : " + user.getMoney() + ",";
 		json += "\"stockValue\" : " + user.getStockValue() + ",";
 		json += "\"available\" : " + company.getNumberOfAvailableStocks() + ",";
-		json += "\"owned\" : " + user.getNumberOfStocks(cname) + ",";
-		json += "\"averagePurchasePrice\" : " + user.getAveragePurchasePrice(cname);
+		json += "\"owned\" : " + user.getNumberOfStocks(csym) + ",";
+		json += "\"averagePurchasePrice\" : " + user.getAveragePurchasePrice(csym);
 		json += "}";
 	    } else // not enough money or stocks available
 		json = "{ \"status\" : \"Failed\" }";
 	} else if(action.equals("sell")) {
-	    if(user.sellStock(cname)) {
+	    if(user.sellStock(csym)) {
 		json = "{ ";
 		json += "\"status\" : \"success\","; 
 		json += "\"balance\" : " + user.getMoney() + ",";
 		json += "\"stockValue\" : " + user.getStockValue() + ",";
 		json += "\"available\" : " + company.getNumberOfAvailableStocks() + ",";
-		json += "\"owned\" : " + user.getNumberOfStocks(cname) + ",";
-		json += "\"averagePurchasePrice\" : " + user.getAveragePurchasePrice(cname);
+		json += "\"owned\" : " + user.getNumberOfStocks(csym) + ",";
+		json += "\"averagePurchasePrice\" : " + user.getAveragePurchasePrice(csym);
 		json += "}";
 	    } else // not enough money
 		json = "{ \"status\" : \"Failed\" }";

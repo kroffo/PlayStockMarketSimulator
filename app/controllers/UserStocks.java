@@ -32,13 +32,12 @@ public class UserStocks extends Controller {
 	for(int i=0, length=companies.length; i<length; ++i) {
 	    models.Company company = companies[i];
 	    String currentPath = request().host() + request().path();
-	    String cname = company.getName();
 	    String csym = company.getSymbol();
 	    json += "  \"" + csym + "\": {\n";
 	    json += "    \"price\": " + company.getStockValue() + ",\n";
 	    json += "    \"available\": " + company.getNumberOfAvailableStocks() + ",\n";
-	    json += "    \"stocks\": " + user.getNumberOfStocks(cname) + ",\n";
-	    json += "    \"averagePurchasePrice\": " + user.getAveragePurchasePrice(cname) + ",\n";
+	    json += "    \"stocks\": " + user.getNumberOfStocks(csym) + ",\n";
+	    json += "    \"averagePurchasePrice\": " + user.getAveragePurchasePrice(csym) + ",\n";
 	    json += "    \"links\": [\n";
 	    json += "      {\n";
 	    json += "        \"rel\": \"self\",\n";

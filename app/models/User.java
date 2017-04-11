@@ -31,8 +31,7 @@ public class User extends Model {
 
     // "userName" is the field in Stocks.java this is mapped to
     @OneToMany(mappedBy = "user")
-    private Set<Stocks> stocks;
-    
+    private Set<Stocks> stocks;    
     
     public String getPassword(){
 	return password;
@@ -76,11 +75,6 @@ public class User extends Model {
     public static User getUser(String n) {
 	User user = User.find.byId(n);
 	return user;
-	// User[] users = getUsers();
-	// for(User u : users)
-	//     if(u.getName().equals(n))
-	//        return u;
-	// return null;
     }
     
     private User(String n, String p, double m) {
@@ -88,11 +82,10 @@ public class User extends Model {
 	password = p;
 	money = m;
     }
-    
-    public int getNumberOfStocks(String cname) {
-	return 7;
-	// Integer n = stocks.get(cname);
-	// return (n == null) ? 0 : (int)n;
+
+    public int getNumberOfStocks(String csym) {
+	Stocks stock = Stocks.findStocks(name, csym);
+	return (stock == null) ? 0 : stock.getStocks();
     }
 
     public String getName() {
@@ -103,47 +96,35 @@ public class User extends Model {
 	return money;
     }
 
-    public boolean purchaseStock(String cname) {
-	Company comp = Company.getCompany(cname);
+    public boolean purchaseStock(String csym) {
+	Company comp = Company.getCompanyBySymbol(csym);
 	double price = comp.getStockValue();
-	double newAverage, avPrice;
-	int numberOfStocks = getNumberOfStocks(cname);
 	if(price <= money && comp.buyStock()) {
 	    money -= price;
-	    /* UPDATE STOCKS HERE */
-	    //avPrice = averagePrices.get(cname);
-            //newAverage = (((avPrice * numberOfStocks) + price) / (numberOfStocks + 1));
-            //averagePrices.put(cname, newAverage);
-	    //stocks.put(cname, getNumberOfStocks(cname) + 1);
-	    if(this.saveData())
-		return true;
-	    else {
-		//averagePrices.put(cname, avPrice);
-	    	money += price;
-	    	//stocks.put(cname, getNumberOfStocks(cname) - 1);
-	    	comp.sellStock();
-	    }
+	    Stocks stock = Stocks.findStocks(name, csym);
+	    int numberOfStocks = stock.getStocks();
+	    double avPrice = stock.getAveragePrice();
+            double newAverage = (((avPrice * numberOfStocks) + price) / (numberOfStocks + 1));
+            stock.setAveragePrice(newAverage);
+	    stock.update();
+	    this.saveData();
+	    return true;
 	}
 	return false;
     }
 
-    public boolean sellStock(String cname) {
-	Company comp = Company.getCompany(cname);
+    public boolean sellStock(String csym) {
+	Company comp = Company.getCompanyBySymbol(csym);
 	double price = comp.getStockValue();
-	if(getNumberOfStocks(cname) > 0 && comp.sellStock()) {
+	if(getNumberOfStocks(csym) > 0 && comp.sellStock()) {
 	    money += price;
-	    /* UPDATE STOCKS HERE */
-	    // stocks.put(cname, getNumberOfStocks(cname) - 1);
-	    // if (getNumberOfStocks(cname) == 0) {
-	    // 	averagePrices.put(cname, 0.0);
-	    // }
-	    if(this.saveData())
-		return true;
-	    else {
-	    	money -= price;
-	    	//stocks.put(cname, getNumberOfStocks(cname) + 1);
-	    	comp.buyStock();
-	    }
+	    Stocks stock = Stocks.findStocks(name, csym);
+	    stock.removeStock();
+	    if (stock.getStocks() == 0)
+	     	stock.setAveragePrice(0);
+	    stock.update();
+	    this.saveData();
+	    return true;
 	}
 	return false;
     }
@@ -153,9 +134,9 @@ public class User extends Model {
 	Company[] companies = Company.getCompanies();
 	for(int i=0; i<companies.length; ++i) {
 	    Company c = companies[i];
-	    String cname = c.getName();
+	    String csym = c.getSymbol();
 	    double price = c.getStockValue();
-	    int numStocks = getNumberOfStocks(cname);
+	    int numStocks = getNumberOfStocks(csym);
 	    total += numStocks*price;
 	}
 	return total;
@@ -166,13 +147,17 @@ public class User extends Model {
 	return true;
     }
 
-    public double getAveragePurchasePrice(String cname) {
-	return 7.0;
-	//	return averagePrices.get(cname);
+    public double getAveragePurchasePrice(String csym) {
+	Stocks stock = Stocks.findStocks(name, csym);
+	return (stock == null) ? 0 : stock.getAveragePrice();
     }
 
     public static boolean deleteUser(String name) {
-	// Must write this...
+	User u = getUser(name);
+	if(u != null) {
+	    u.delete();
+	    return true;
+	}
 	return false;
     }
 

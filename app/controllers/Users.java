@@ -28,10 +28,9 @@ public class Users extends Controller {
 	    if (sortingMethod.equals("stocks") && symbol != null) {
 		models.Company company = models.Company.getCompanyBySymbol(symbol);
 		if(company != null) {
-		    String companyName = company.getName();
 		    for (int i = 0; i <users.length; ++i) {
 			for (int j = i + 1; j <users.length; ++j) {
-			    if (users[j].getNumberOfStocks(companyName) > users[i].getNumberOfStocks(companyName)) {
+			    if (users[j].getNumberOfStocks(symbol) > users[i].getNumberOfStocks(symbol)) {
 				models.User temp = users[i];
 				users[i] = users[j];
 				users[j] = temp;
