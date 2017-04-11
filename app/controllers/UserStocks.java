@@ -5,8 +5,8 @@ import play.mvc.BodyParser.Json;
 
 import views.html.*;
 
-import services.User;
-import services.Company;
+import models.User;
+import models.Company;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -16,7 +16,7 @@ public class UserStocks extends Controller {
 
 	//updatePrices();
 
-	services.User user = services.User.getUser(name);
+	models.User user = models.User.getUser(name);
 	if(user == null) {
 	    return status(404);
 	}
@@ -25,12 +25,12 @@ public class UserStocks extends Controller {
 	return ok(json);
     }
 
-    private String getUserStockJSON(services.User user) {
-	services.Company[] companies = services.Company.getCompanies();
+    private String getUserStockJSON(models.User user) {
+	models.Company[] companies = models.Company.getCompanies();
 	String json = "{\n";
 	    
 	for(int i=0, length=companies.length; i<length; ++i) {
-	    services.Company company = companies[i];
+	    models.Company company = companies[i];
 	    String currentPath = request().host() + request().path();
 	    String cname = company.getName();
 	    String csym = company.getSymbol();
@@ -55,12 +55,12 @@ public class UserStocks extends Controller {
 	
     // // Updates the stock prices of the companies.
     // public void updatePrices() {
-    //     services.Company[] companies = services.Company.getCompanies();
+    //     models.Company[] companies = models.Company.getCompanies();
     //     String[] symbols = new String[companies.length];
     //     for(int i=0, length=companies.length; i<length; ++i) {
     // 	symbols[i] = companies[i].getSymbol();
     //     }
-    //     services.StockReader.updateStocks(symbols);
+    //     models.StockReader.updateStocks(symbols);
     // }
 	
 }

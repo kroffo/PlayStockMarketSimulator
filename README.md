@@ -24,7 +24,7 @@ To run the application, you must have MySQL running on port 3306 of the same mac
         symbol VARCHAR(255),
         stocks INT,
         averagePrice DOUBLE PRECISION,
-        PRIMARY KEY (user, company)
+        PRIMARY KEY (name, symbol)
     );
     GRANT ALL ON playstocksim.* TO 'playstocksimuser' IDENTIFIED BY 'playstocksimpassword';
     INSERT INTO Companies VALUES('Advanced Micro Devices', 'AMD', 50, 100);
