@@ -146,6 +146,7 @@ public class Company extends Model {
     }
     
     public boolean saveData() {
+	this.update();
 	return true;
     }
 }
