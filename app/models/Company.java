@@ -30,7 +30,7 @@ public class Company extends Model {
     private int stocksAvailable;
 
     @OneToMany(mappedBy = "company")
-    private Set<Stocks> stocks;
+    private List<Stocks> stocks;
 
     // MAKE PRIVATE WHEN TESTCOMPANIES IS DELETED
     public Company(String n, String sym, double sv, int as) {
@@ -54,25 +54,22 @@ public class Company extends Model {
 	Company c = new Company(name, symbol, DEFAULT_STOCK_VALUE, DEFAULT_NUMBER_OF_STOCKS);
 	c.save();
 	
-	Set<Stocks> stocks = new HashSet<>();
+	List<Stocks> stocks = new ArrayList<>();
 	User[] users = User.getUsers();
 	for(User u : users) {
-	    Stocks stock = new Stocks();
+	    Stocks stock = new Stocks(u, c);
 	    stocks.add(stock);
-	    stock.setCompany(c);
 	    u.addStocks(stock);
-	    stock.setUser(u);
-	    
 	    u.update();
 	    stock.save();
 	}
-
+	
 	c.setStocks(stocks);
 	c.update();
 	return true;
     }
 
-    public void setStocks(Set<Stocks> stockSet) {
+    public void setStocks(List<Stocks> stockSet) {
 	stocks = stockSet;
     }
 
@@ -82,14 +79,14 @@ public class Company extends Model {
 
     public static boolean updateCompany(String name, String symbol) {
 	Company c = getCompanyBySymbol(symbol);
-	c.setName(name);
-	c.update();
-	return true;
+	if(c != null) {
+	    c.name = name;
+	    c.update();
+	    return true;
+	}
+	return false;
     }
-
-    // REMOVE THIS ONCE THE DATABASE IS HOOKED UP, AND updateCompany() IS REWRITTEN
-    public void setName(String name) { this.name = name; }
-
+    
     public static boolean deleteCompany(String symbol) {
 	// Must write this...
 	return false;
