@@ -87,7 +87,7 @@ public class Company extends Model {
 	return false;
     }
     
-    private Stocks getStock(String uname) {
+  private Stocks getStock(String uname) {
 	Stocks[] stockArr = stocks.toArray( new Stocks[stocks.size()] );
 	for(Stocks stock : stocks)
 	    if(stock.getUser().getName().equals(uname))
