@@ -1,9 +1,6 @@
 package models;
 
 import java.util.*;
-// import java.util.HashMap;
-// import java.util.List;
-// import java.util.ArrayList;
 
 import javax.persistence.*;
 import com.avaje.ebean.Model;
@@ -29,10 +26,9 @@ public class User extends Model {
     @Constraints.Required
     private String password;
 
-    // "userName" is the field in Stocks.java this is mapped to
     @OneToMany(mappedBy = "user")
-    private Set<Stocks> stocks;    
-    
+    private List<Stocks> stocks;
+
     public String getPassword(){
 	return password;
     }
@@ -41,25 +37,22 @@ public class User extends Model {
 	User u = new User(name, password, START_MONEY);
 	u.save();
 	
-	Set<Stocks> stocks = new HashSet<>();
+	List<Stocks> stocks = new ArrayList<>();
 	Company[] companies = Company.getCompanies();
 	for(Company c : companies) {
-	    Stocks stock = new Stocks();
+	    Stocks stock = new Stocks(u, c);
 	    c.addStocks(stock);
-	    stock.setCompany(c);
 	    stocks.add(stock);
-	    stock.setUser(u);
-	    
 	    stock.save();
 	    c.update();
 	}
-
+	
 	u.setStocks(stocks);
 	u.update();
 	return true;
     }
 
-    public void setStocks(Set<Stocks> stockSet) {
+    public void setStocks(List<Stocks> stockSet) {
 	stocks = stockSet;
     }
 
@@ -84,8 +77,8 @@ public class User extends Model {
     }
 
     public int getNumberOfStocks(String csym) {
-	Stocks stock = Stocks.findStocks(name, csym);
-	return (stock == null) ? 0 : stock.getStocks();
+        Stocks stock = getStock(csym);
+	return (stock != null) ? stock.getStocks() : 0;
     }
 
     public String getName() {
@@ -96,15 +89,24 @@ public class User extends Model {
 	return money;
     }
 
+    private Stocks getStock(String csym) {
+	Stocks[] stockArr = stocks.toArray( new Stocks[stocks.size()] );
+	for(Stocks stock : stocks)
+	    if(stock.getCompany().getSymbol().equals(csym))
+		return stock;
+	return null;
+    }
+
     public boolean purchaseStock(String csym) {
 	Company comp = Company.getCompanyBySymbol(csym);
 	double price = comp.getStockValue();
 	if(price <= money && comp.buyStock()) {
 	    money -= price;
-	    Stocks stock = Stocks.findStocks(name, csym);
+	    Stocks stock = getStock(csym);
 	    int numberOfStocks = stock.getStocks();
 	    double avPrice = stock.getAveragePrice();
             double newAverage = (((avPrice * numberOfStocks) + price) / (numberOfStocks + 1));
+	    stock.addStock();
             stock.setAveragePrice(newAverage);
 	    stock.update();
 	    this.saveData();
@@ -118,7 +120,7 @@ public class User extends Model {
 	double price = comp.getStockValue();
 	if(getNumberOfStocks(csym) > 0 && comp.sellStock()) {
 	    money += price;
-	    Stocks stock = Stocks.findStocks(name, csym);
+	    Stocks stock = getStock(csym);
 	    stock.removeStock();
 	    if (stock.getStocks() == 0)
 	     	stock.setAveragePrice(0);
@@ -148,13 +150,20 @@ public class User extends Model {
     }
 
     public double getAveragePurchasePrice(String csym) {
-	Stocks stock = Stocks.findStocks(name, csym);
+	Stocks stock = getStock(csym);
 	return (stock == null) ? 0 : stock.getAveragePrice();
     }
 
     public static boolean deleteUser(String name) {
 	User u = getUser(name);
 	if(u != null) {
+	    Company[] companies = Company.getCompanies();
+	    for(Company c: companies) {
+		Stocks s = u.getStock(c.getSymbol());
+		if(s != null){
+		    s.delete();
+		}
+	    }
 	    u.delete();
 	    return true;
 	}
