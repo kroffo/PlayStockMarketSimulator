@@ -40,16 +40,16 @@ public class UserQuery extends Controller {
 	    return status(404, "User with the name " + name + "does not exist."); 
 	}
 	
-	    String password = json.findPath("password").textValue();
-
-	    if(password == null)
-		return badRequest("Missing parameter [password]");
-	    
-	    if (!models.User.updateUser(name, password)){
-		return internalServerError();
-	    }
-	    
-	    return status(204);
+	String password = json.findPath("password").textValue();
+	
+	if(password == null)
+	    return badRequest("Missing parameter [password]");
+	
+	if (!models.User.updateUser(name, password)){
+	    return internalServerError();
+	}
+	
+	return status(204);
     }
     
     //DELETE

@@ -13,8 +13,6 @@ import play.data.validation.*;
 public class Stocks extends Model {
 
     public static Finder<String, Stocks> find = new Finder<>(Stocks.class);
-    private static int nextId = 0;
-    
     
     @Id
     @Constraints.Required
@@ -35,19 +33,17 @@ public class Stocks extends Model {
     private double averagePrice;
 
     public Stocks(User u, Company c) {
-	int rows = getStoredNumberOfRows();
-	if(rows >= Stocks.nextId)
-	    Stocks.nextId = rows + 1;
-	id = Stocks.nextId++;
+	int id = getNextId();
 	user = u;
 	company = c;
 	stocks = 0;
 	averagePrice = 0.0;
     }
 
-    private static int getStoredNumberOfRows() {
+    private static int getNextId() {
 	List<Stocks> stocksList = Stocks.find.all();
-	return stocksList.toArray( new Stocks[stocksList.size()] ).length ;
+	Stocks last = stocksList.get( stocksList.size() - 1);
+	return last.id + 1;
     }
 
     public void setAveragePrice(double p) {

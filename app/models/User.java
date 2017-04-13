@@ -157,6 +157,13 @@ public class User extends Model {
     public static boolean deleteUser(String name) {
 	User u = getUser(name);
 	if(u != null) {
+	    Company[] companies = Company.getCompanies();
+	    for(Company c: companies) {
+		Stocks s = u.getStock(c.getSymbol());
+		if(s != null){
+		    s.delete();
+		}
+	    }
 	    u.delete();
 	    return true;
 	}
@@ -165,12 +172,13 @@ public class User extends Model {
 
     public static boolean updateUser(String name, String password) {
 	User u = getUser(name);
-	u.setPassword(password);
-	u.update();
-	return true;
+	if(u != null) {
+	    u.setPassword(password);
+	    u.update();
+	    return true;
+	}
+	return false;
     }
 
-    //temp method to test REST API, remove once database is hooked up
     public void setPassword(String password) { this.password = password; this.save(); }
 }
-    

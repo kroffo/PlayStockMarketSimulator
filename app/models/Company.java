@@ -80,18 +80,44 @@ public class Company extends Model {
     public static boolean updateCompany(String name, String symbol) {
 	Company c = getCompanyBySymbol(symbol);
 	if(c != null) {
-	    c.name = name;
+	    System.out.println(name);
+	    c.setName(name);
 	    c.update();
+	    System.out.println(c.name);
+	    return true;
+	}
+	return false;
+    }
+
+    public void setName(String n) {
+	this.name = n;
+	this.save();
+    }
+    
+    private Stocks getStock(String uname) {
+	Stocks[] stockArr = stocks.toArray( new Stocks[stocks.size()] );
+	for(Stocks stock : stocks)
+	    if(stock.getUser().getName().equals(uname))
+		return stock;
+	return null;
+    }                     
+    
+    public static boolean deleteCompany(String sym) {
+	Company c = getCompanyBySymbol(sym);
+	if(c != null) {
+	    User[] users = User.getUsers();
+	    for(User u : users) {
+		Stocks s = c.getStock(u.getName());    
+		if(s != null) {
+		    s.delete();
+		}
+	    }
+	    c.delete();
 	    return true;
 	}
 	return false;
     }
     
-    public static boolean deleteCompany(String symbol) {
-	// Must write this...
-	return false;
-    }    
-
     public static Company[] getCompanies() {
 	List<Company> companyList = Company.find.all();
 	return companyList.toArray(new Company[companyList.size()]);
@@ -128,7 +154,7 @@ public class Company extends Model {
 	}
 	return false;
     }
-
+    
     public boolean sellStock() {
 	stocksAvailable++;
 	if(this.saveData())
@@ -141,8 +167,7 @@ public class Company extends Model {
     public void updatePrice(double v) {
 	double oldValue = v;
 	stockValue = v;
-	if(!this.saveData())
-	    stockValue = oldValue;
+	this.update();
     }
     
     public boolean saveData() {

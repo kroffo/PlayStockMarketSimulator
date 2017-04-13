@@ -19,7 +19,7 @@ public class CompanyQuery extends Controller {
 
     public Result getCompany(String sym) {
 	    
-	//updatePrices();
+	updatePrices();
 
 	models.Company c = models.Company.getCompanyBySymbol(sym);
 	if(c == null) {
@@ -40,7 +40,7 @@ public class CompanyQuery extends Controller {
 	
 	if(json == null)
 	    return badRequest("Expecting Json data");
-
+	
 	String name = json.findPath("name").textValue();
 	if(name == null)
 	    return badRequest("Missing parameter [name]");
@@ -50,7 +50,6 @@ public class CompanyQuery extends Controller {
 	if(!models.Company.updateCompany(name, symbol)) {
 	    return internalServerError();
 	}
-	    
 	return status(204);
     }
 	
@@ -79,13 +78,14 @@ public class CompanyQuery extends Controller {
 	return json;
     }
 
-	// // Updates the stock prices of the companies.
-	// public void updatePrices() {
-	//     models.Company[] companies = models.Company.getCompanies();
-	//     String[] symbols = new String[companies.length];
-	//     for(int i=0, length=companies.length; i<length; ++i) {
-	// 	symbols[i] = companies[i].getSymbol();
-	//     }
-	//     models.StockReader.updateStocks(symbols);
-	// }
+    // Updates the stock prices of the companies.
+    public void updatePrices() {
+	models.Company[] companies = models.Company.getCompanies();
+     	String[] symbols = new String[companies.length];
+     	for(int i=0, length=companies.length; i<length; ++i) {
+     	    symbols[i] = companies[i].getSymbol();
+     	}
+     	StockReader.updateStocks(symbols);
+    }
+    
 }

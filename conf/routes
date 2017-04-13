@@ -15,7 +15,7 @@ PUT 	/companies/:symbol	    controllers.CompanyQuery.updateCompany(symbol: Strin
 
 DELETE	/companies/:symbol	    controllers.CompanyQuery.deleteCompany(symbol: String)
 
-GET     /users                      controllers.Users.getUsers(sort: String ?=null, symbol: String ?=null)
+GET     /users                      controllers.Users.getUsers(sortingMethod: String ?=null, symbol: String ?=null)
 
 POST    /users                      controllers.Users.postUser()
 

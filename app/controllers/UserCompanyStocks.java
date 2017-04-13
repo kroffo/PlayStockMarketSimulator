@@ -14,7 +14,7 @@ public class UserCompanyStocks extends Controller {
 	
     public Result getStocks(String name, String symbol) {
 
-	//updatePrices();
+	updatePrices();
 
 	models.User user = models.User.getUser(name);
 	models.Company company = models.Company.getCompanyBySymbol(symbol);
@@ -22,9 +22,9 @@ public class UserCompanyStocks extends Controller {
 	    return status(404);
 	}
 	if(company == null) {
-	    status(404);
+	    return status(404);
 	}
-
+	
 	String json = getUserCompanyStockJSON(user, company);
 	return ok(json);
     }
@@ -66,6 +66,8 @@ public class UserCompanyStocks extends Controller {
         String csym = company.getSymbol();
 	if(action.equals("buy")) {
 	    if(user.purchaseStock(csym)) {
+		// Re-read the company to update changed values
+		company = Company.getCompanyBySymbol(csym);
 		json = "{ ";
 		json += "\"status\" : \"success\","; 
 		json += "\"balance\" : " + user.getMoney() + ",";
@@ -78,6 +80,8 @@ public class UserCompanyStocks extends Controller {
 		json = "{ \"status\" : \"Failed\" }";
 	} else if(action.equals("sell")) {
 	    if(user.sellStock(csym)) {
+		// Re-read the company to update changed values
+		company = Company.getCompanyBySymbol(csym);
 		json = "{ ";
 		json += "\"status\" : \"success\","; 
 		json += "\"balance\" : " + user.getMoney() + ",";
@@ -94,14 +98,13 @@ public class UserCompanyStocks extends Controller {
 	return ok(json);
     }
     
-    // // Updates the stock prices of the companies.
-    // public void updatePrices() {
-    // 	models.Company[] companies = models.Company.getCompanies();
-    // 	String[] symbols = new String[companies.length];
-    // 	for(int i=0, length=companies.length; i<length; ++i) {
-    // 	    symbols[i] = companies[i].getSymbol();
-    // 	}
-    // 	models.StockReader.updateStocks(symbols);
-    // }
-
+    // Updates the stock prices of the companies.
+    public void updatePrices() {
+	models.Company[] companies = models.Company.getCompanies();
+     	String[] symbols = new String[companies.length];
+     	for(int i=0, length=companies.length; i<length; ++i) {
+     	    symbols[i] = companies[i].getSymbol();
+     	}
+     	StockReader.updateStocks(symbols);
+    }
 }

@@ -14,7 +14,7 @@ public class UserStocks extends Controller {
 	
     public Result getStocks(String name) {
 
-	//updatePrices();
+	updatePrices();
 
 	models.User user = models.User.getUser(name);
 	if(user == null) {
@@ -52,15 +52,14 @@ public class UserStocks extends Controller {
 	return json;
     }
 	
-    // // Updates the stock prices of the companies.
-    // public void updatePrices() {
-    //     models.Company[] companies = models.Company.getCompanies();
-    //     String[] symbols = new String[companies.length];
-    //     for(int i=0, length=companies.length; i<length; ++i) {
-    // 	symbols[i] = companies[i].getSymbol();
-    //     }
-    //     models.StockReader.updateStocks(symbols);
-    // }
-	
+    // Updates the stock prices of the companies.
+    public void updatePrices() {
+	models.Company[] companies = models.Company.getCompanies();
+     	String[] symbols = new String[companies.length];
+     	for(int i=0, length=companies.length; i<length; ++i) {
+     	    symbols[i] = companies[i].getSymbol();
+     	}
+     	StockReader.updateStocks(symbols);
+    }	
 }
 

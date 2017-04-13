@@ -19,7 +19,7 @@ public class Companies extends Controller {
 
     public Result getCompanies() {
 
-	//updatePrices();
+	updatePrices();
 	
 	models.Company[] companies = models.Company.getCompanies();
 
@@ -72,12 +72,12 @@ public class Companies extends Controller {
     }
 
     // Updates the stock prices of the companies.
-    // public void updatePrices() {
-    // 	models.Company[] companies = models.Company.getCompanies();
-    // 	String[] symbols = new String[companies.length];
-    // 	for(int i=0, length=companies.length; i<length; ++i) {
-    // 	    symbols[i] = companies[i].getSymbol();
-    // 	}
-    // 	models.StockReader.updateStocks(symbols);
-    // }
+    public void updatePrices() {
+	models.Company[] companies = models.Company.getCompanies();
+     	String[] symbols = new String[companies.length];
+     	for(int i=0, length=companies.length; i<length; ++i) {
+     	    symbols[i] = companies[i].getSymbol();
+     	}
+     	StockReader.updateStocks(symbols);
+    }
 }
