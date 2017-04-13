@@ -5,7 +5,7 @@ import play.mvc.BodyParser.Json;
 
 import views.html.*;
 
-import services.Company;
+import models.Company;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.io.BufferedReader;
@@ -19,13 +19,13 @@ public class Companies extends Controller {
 
     public Result getCompanies() {
 
-	//updatePrices();
+	updatePrices();
 	
-	services.Company[] companies = services.Company.getCompanies();
+	models.Company[] companies = models.Company.getCompanies();
 
 	String json = "[\n";
 	for(int i=0, length=companies.length; i<length; ++i) {
-	    services.Company c = companies[i];
+	    models.Company c = companies[i];
 	    String currentPath = request().host() + request().path();
 	    String cname = c.getName();
 	    String csym = c.getSymbol();
@@ -63,7 +63,7 @@ public class Companies extends Controller {
 	if(name == null)
 	    return badRequest("Missing parameter [name]");
 
-	if(services.Company.getCompanyBySymbol(symbol) != null)
+	if(models.Company.getCompanyBySymbol(symbol) != null)
 	    return status(409, "Company with symbol " + symbol + " already exists.");
 	boolean success = Company.addCompany(name, symbol);
 	if(success)
@@ -72,12 +72,12 @@ public class Companies extends Controller {
     }
 
     // Updates the stock prices of the companies.
-    // public void updatePrices() {
-    // 	services.Company[] companies = services.Company.getCompanies();
-    // 	String[] symbols = new String[companies.length];
-    // 	for(int i=0, length=companies.length; i<length; ++i) {
-    // 	    symbols[i] = companies[i].getSymbol();
-    // 	}
-    // 	services.StockReader.updateStocks(symbols);
-    // }
+    public void updatePrices() {
+	models.Company[] companies = models.Company.getCompanies();
+     	String[] symbols = new String[companies.length];
+     	for(int i=0, length=companies.length; i<length; ++i) {
+     	    symbols[i] = companies[i].getSymbol();
+     	}
+     	StockReader.updateStocks(symbols);
+    }
 }

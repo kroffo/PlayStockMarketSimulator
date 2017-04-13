@@ -1,0 +1,80 @@
+package controllers;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import models.Company;
+
+public class StockReader {
+    private static final String BASE_URL = "http://finance.google.com/finance/info?client=ig&q=NASDAQ:";
+    private static long previousUpdateTime = 0;
+
+    public static void updateStocks(String[] symbols) {
+	long currentTime = System.currentTimeMillis();
+	
+	// Don't update more than once every ten seconds
+	if(currentTime - previousUpdateTime > 10000)
+	    previousUpdateTime = currentTime;
+	else
+	    return;
+
+	String urlString = BASE_URL;
+	URL url = null;
+	HttpURLConnection connection = null;
+	JSONArray arr = null;
+	for(String sym : symbols)
+	    urlString += sym + ",";
+	try {
+	    url = new URL(urlString);
+	    connection = (HttpURLConnection) url.openConnection();
+	    connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "text/plain");
+
+	    connection.setUseCaches(false);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            connection.getInputStream()
+                    )
+            );
+            
+            String inputLine;
+            String response = "";
+            while ((inputLine = in.readLine()) != null) {
+                response = response + inputLine + "\n";
+            }
+            in.close();
+            if(response == null) {
+		return;
+	    }
+	    // the url returns two '/' characters at the start.
+	    // Remove them for valid JSON.
+	    response = response.substring(3);
+	    arr = new JSONArray(response);
+	} catch(IOException e) {
+	    return;
+	} finally {
+	    connection.disconnect();
+	}
+
+	if(arr != null) {
+	    int length = arr.length();
+	    for(int i=0; i<length; ++i) {
+		JSONObject obj = arr.getJSONObject(i);
+		String sym = obj.getString("t");
+		String[] priceStringComponents = obj.getString("l").split(",");
+		String priceString = "";
+		for(int j=0; j<priceStringComponents.length; ++j)
+		    priceString += priceStringComponents[j];
+		double price = Double.parseDouble(priceString);
+		models.Company c = models.Company.getCompanyBySymbol(sym);
+		c.updatePrice(price);
+	    }
+	}
+    }
+}

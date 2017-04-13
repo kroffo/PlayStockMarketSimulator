@@ -5,7 +5,7 @@ import play.mvc.BodyParser.Json;
 
 import views.html.*;
 
-import services.Company;
+import models.Company;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.io.BufferedReader;
@@ -19,9 +19,9 @@ public class CompanyQuery extends Controller {
 
     public Result getCompany(String sym) {
 	    
-	//updatePrices();
+	updatePrices();
 
-	services.Company c = services.Company.getCompanyBySymbol(sym);
+	models.Company c = models.Company.getCompanyBySymbol(sym);
 	if(c == null) {
 	    return status(404);
 	}
@@ -32,7 +32,7 @@ public class CompanyQuery extends Controller {
 
     @BodyParser.Of(Json.class)
     public Result updateCompany(String symbol) {
-	services.Company c = services.Company.getCompanyBySymbol(symbol);
+	models.Company c = models.Company.getCompanyBySymbol(symbol);
 	if(c == null) {
 	    return status(404, "Company with symbol " + symbol + " does not exist.");
 	}
@@ -40,36 +40,35 @@ public class CompanyQuery extends Controller {
 	
 	if(json == null)
 	    return badRequest("Expecting Json data");
-
+	
 	String name = json.findPath("name").textValue();
 	if(name == null)
 	    return badRequest("Missing parameter [name]");
 	
 	// Attempt to update the company
 	// If it fails, return a server error
-	if(!services.Company.updateCompany(name, symbol)) {
+	if(!models.Company.updateCompany(name, symbol)) {
 	    return internalServerError();
 	}
-	    
 	return status(204);
     }
 	
     public Result deleteCompany(String symbol) {
-	services.Company c = services.Company.getCompanyBySymbol(symbol);
+	models.Company c = models.Company.getCompanyBySymbol(symbol);
 	if(c == null) {
 	    return status(404);
 	}
 	
 	// Attempt to add the company
 	// If it fails, return a server error
-	if(!services.Company.deleteCompany(symbol)) {
+	if(!models.Company.deleteCompany(symbol)) {
 	    return internalServerError();
 	}
 	String json = getJsonForCompany(c);
 	return ok(json);
     }
 
-    private String getJsonForCompany(services.Company c) {
+    private String getJsonForCompany(models.Company c) {
 	String json = "{\n";
 	json += "  \"name\": \"" + c.getName() + "\",\n";
 	json += "  \"symbol\": \"" + c.getSymbol() + "\",\n";
@@ -79,13 +78,14 @@ public class CompanyQuery extends Controller {
 	return json;
     }
 
-	// // Updates the stock prices of the companies.
-	// public void updatePrices() {
-	//     services.Company[] companies = services.Company.getCompanies();
-	//     String[] symbols = new String[companies.length];
-	//     for(int i=0, length=companies.length; i<length; ++i) {
-	// 	symbols[i] = companies[i].getSymbol();
-	//     }
-	//     services.StockReader.updateStocks(symbols);
-	// }
+    // Updates the stock prices of the companies.
+    public void updatePrices() {
+	models.Company[] companies = models.Company.getCompanies();
+     	String[] symbols = new String[companies.length];
+     	for(int i=0, length=companies.length; i<length; ++i) {
+     	    symbols[i] = companies[i].getSymbol();
+     	}
+     	StockReader.updateStocks(symbols);
+    }
+    
 }

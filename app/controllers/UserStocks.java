@@ -5,8 +5,8 @@ import play.mvc.BodyParser.Json;
 
 import views.html.*;
 
-import services.User;
-import services.Company;
+import models.User;
+import models.Company;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -14,9 +14,9 @@ public class UserStocks extends Controller {
 	
     public Result getStocks(String name) {
 
-	//updatePrices();
+	updatePrices();
 
-	services.User user = services.User.getUser(name);
+	models.User user = models.User.getUser(name);
 	if(user == null) {
 	    return status(404);
 	}
@@ -25,20 +25,19 @@ public class UserStocks extends Controller {
 	return ok(json);
     }
 
-    private String getUserStockJSON(services.User user) {
-	services.Company[] companies = services.Company.getCompanies();
+    private String getUserStockJSON(models.User user) {
+	models.Company[] companies = models.Company.getCompanies();
 	String json = "{\n";
 	    
 	for(int i=0, length=companies.length; i<length; ++i) {
-	    services.Company company = companies[i];
+	    models.Company company = companies[i];
 	    String currentPath = request().host() + request().path();
-	    String cname = company.getName();
 	    String csym = company.getSymbol();
 	    json += "  \"" + csym + "\": {\n";
 	    json += "    \"price\": " + company.getStockValue() + ",\n";
 	    json += "    \"available\": " + company.getNumberOfAvailableStocks() + ",\n";
-	    json += "    \"stocks\": " + user.getNumberOfStocks(cname) + ",\n";
-	    json += "    \"averagePurchasePrice\": " + user.getAveragePurchasePrice(cname) + ",\n";
+	    json += "    \"stocks\": " + user.getNumberOfStocks(csym) + ",\n";
+	    json += "    \"averagePurchasePrice\": " + user.getAveragePurchasePrice(csym) + ",\n";
 	    json += "    \"links\": [\n";
 	    json += "      {\n";
 	    json += "        \"rel\": \"self\",\n";
@@ -53,15 +52,14 @@ public class UserStocks extends Controller {
 	return json;
     }
 	
-    // // Updates the stock prices of the companies.
-    // public void updatePrices() {
-    //     services.Company[] companies = services.Company.getCompanies();
-    //     String[] symbols = new String[companies.length];
-    //     for(int i=0, length=companies.length; i<length; ++i) {
-    // 	symbols[i] = companies[i].getSymbol();
-    //     }
-    //     services.StockReader.updateStocks(symbols);
-    // }
-	
+    // Updates the stock prices of the companies.
+    public void updatePrices() {
+	models.Company[] companies = models.Company.getCompanies();
+     	String[] symbols = new String[companies.length];
+     	for(int i=0, length=companies.length; i<length; ++i) {
+     	    symbols[i] = companies[i].getSymbol();
+     	}
+     	StockReader.updateStocks(symbols);
+    }	
 }
 
