@@ -87,11 +87,30 @@ public class Company extends Model {
 	return false;
     }
     
-    public static boolean deleteCompany(String symbol) {
-	// Must write this...
+  private Stocks getStock(String uname) {
+	Stocks[] stockArr = stocks.toArray( new Stocks[stocks.size()] );
+	for(Stocks stock : stocks)
+	    if(stock.getUser().getName().equals(uname))
+		return stock;
+	return null;
+    }                     
+    
+    public static boolean deleteCompany(String sym) {
+	Company c = getCompanyBySymbol(sym);
+	if(c != null) {
+	    User[] users = User.getUsers();
+	    for(User u : users) {
+		Stocks s = c.getStock(u.getName());    
+		if(s != null) {
+		    s.delete();
+		}
+	    }
+	    c.delete();
+	    return true;
+	}
 	return false;
-    }    
-
+    }
+    
     public static Company[] getCompanies() {
 	List<Company> companyList = Company.find.all();
 	return companyList.toArray(new Company[companyList.size()]);

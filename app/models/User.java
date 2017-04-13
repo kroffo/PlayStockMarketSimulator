@@ -157,6 +157,13 @@ public class User extends Model {
     public static boolean deleteUser(String name) {
 	User u = getUser(name);
 	if(u != null) {
+	    Company[] companies = Company.getCompanies();
+	    for(Company c: companies) {
+		Stocks s = u.getStock(c.getSymbol());
+		if(s != null){
+		    s.delete();
+		}
+	    }
 	    u.delete();
 	    return true;
 	}
